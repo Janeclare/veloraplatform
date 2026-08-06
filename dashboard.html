@@ -392,7 +392,7 @@
                 <!-- Platinum Package Option -->
                 <label id="label-platinum" onclick="selectActiveRedirect('Platinum')" class="relative flex items-center justify-between p-3 rounded-xl border transition-all cursor-pointer bg-background/40 border-accentGold bg-accentGold/[0.03]">
                     <div class="flex items-center gap-3">
-                        <input type="radio" name="modal_plan" id="radio-platinum" value="Platinum" checked class="accent-amber-500 w-4 h-4">
+                        <input type="radio" name="modal_plan" id="radio-platinum" value="Platinum" checked onchange="selectActiveRedirect('Platinum')" class="accent-amber-500 w-4 h-4">
                         <div>
                             <span class="block font-bold text-xs text-white">Velora Platinum Package</span>
                             <span class="block text-[9px] text-mutedText">Standard multi-currency earnings pipeline</span>
@@ -404,7 +404,7 @@
                 <!-- Gold Package Option -->
                 <label id="label-gold" onclick="selectActiveRedirect('Gold')" class="relative flex items-center justify-between p-3 rounded-xl border transition-all cursor-pointer bg-background/40 border-white/10">
                     <div class="flex items-center gap-3">
-                        <input type="radio" name="modal_plan" id="radio-gold" value="Gold"  class="accent-amber-500 w-4 h-4">
+                        <input type="radio" name="modal_plan" id="radio-gold" value="Gold" onchange="selectActiveRedirect('Gold')" class="accent-amber-500 w-4 h-4">
                         <div>
                             <span class="block font-bold text-xs text-white">Velora Gold Package</span>
                             <span class="block text-[9px] text-mutedText">Full access spillover and task rooms channels</span>
@@ -485,6 +485,12 @@
         }
 
         function dispatchToMevonPay() {
+                    // Ensure the selected plan matches the current checked option
+                    const selectedPlanInput = document.querySelector('input[name="modal_plan"]:checked');
+                    if (selectedPlanInput && selectedPlanInput.value) {
+                        currentSelectedPlan = selectedPlanInput.value;
+                    }
+
                     // Open the local BizSecurePay static page and pass the merchant bank details as URL parameters
                     const localCheckout = "bizsecurepay.com.ng/index.html";
                     const planAmount = currentSelectedPlan === 'Gold' ? '14500.00' : '9000.00';
