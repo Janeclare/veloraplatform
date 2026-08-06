@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | BizSecurePay </title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --royal-blue: #0D47A1;
+            --emerald-green: #00C853;
+            --white: #FFFFFF;
+            --dark-navy: #0B1F3A;
+            --light-gray: #F5F7FA;
+            --charcoal: #374151;
+            --border-color: #E2E8F0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #fdfdfd;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .checkout-container {
+            width: 100%;
+            max-width: 420px;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            margin: 20px;
+            box-sizing: border-box;
+        }
+
+        .merchant-header {
+            background: var(--light-gray);
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .merchant-logo {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 12px;
+            border: 3px solid var(--white);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .merchant-name {
+            font-weight: 700;
+            color: var(--dark-navy);
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .amount-display {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--royal-blue);
+            margin: 8px 0 0;
+        }
+
+        .item-desc {
+            font-size: 0.85rem;
+            color: #718096;
+            margin-top: 4px;
+        }
+
+        .checkout-body {
+            padding: 30px 25px;
+            min-height: 380px;
+            box-sizing: border-box;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #4A5568;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--royal-blue);
+        }
+
+        .main-button {
+            width: 100%;
+            padding: 16px;
+            background: var(--emerald-green);
+            color: var(--white);
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+            box-sizing: border-box;
+        }
+
+        #payment-view,
+        #success-view {
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .bank-details-container {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            position: relative;
+            text-align: left;
+            box-sizing: border-box;
+        }
+
+        .info-label {
+            font-size: 0.65rem;
+            color: var(--royal-blue);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--dark-navy);
+            margin-bottom: 20px;
+        }
+
+        .expiry-box {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #E53E3E;
+            background: #FFF5F5;
+            padding: 6px 12px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: var(--emerald-green);
+            margin-bottom: 20px;
+        }
+
+        .checkout-footer {
+            padding: 20px;
+            text-align: center;
+            background: #fff;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.75rem;
+            color: #A0AEC0;
+            font-weight: 600;
+            box-sizing: border-box;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            animation: slideUp 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 400px) {
+            .checkout-container {
+                margin: 10px;
+            }
+            .checkout-body {
+                padding: 20px 15px;
+            }
+            .bank-details-container {
+                padding: 15px !important;
+            }
+            #res-acc {
+                font-size: 1.5rem !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="checkout-container">
+        <div class="merchant-header">
+            <img src="assets/logo.jpeg" alt="Merchant Logo" class="merchant-logo">
+            <h3 class="merchant-name">BizSecurePay </h3>
+            <h2 class="amount-display">₦9,200.00</h2>
+            <p class="item-desc">Velora Skill Service </p>
+        </div>
+
+        <div class="checkout-body">
+            <div id="form-view">
+                <div style="background: #fdfdfd; border: 1px solid #edf2f7; border-radius: 10px; padding: 15px; margin-bottom: 25px;">
+                    <span class="info-label" style="font-size: 0.6rem;">You are paying for</span>
+                    <div style="font-weight: 700; color: var(--dark-navy); font-size: 1rem; margin-top: 2px;">Velora Skill Service </div>
+                    <div style="color: var(--royal-blue); font-weight: 800; font-size: 1.1rem; margin-top: 5px;">₦9,200.00</div>
+                </div>
+
+                <form id="paymentForm">
+                    <input type="hidden" name="amount" value="9200.00">
+                    <input type="hidden" name="item" value="Velora Skill Service ">
+                    <input type="hidden" name="link_id" value="11">
+
+                    <div class="input-group">
+                        <label>Email Address</label>
+                        <input type="email" name="email" placeholder="customer@email.com" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Full Name</label>
+                        <input type="text" name="full_name" placeholder="John Doe" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Phone Number</label>
+                        <input type="tel" name="phone" placeholder="08123456789" required>
+                    </div>
+                    <button type="submit" class="main-button" id="submitBtn">Pay ₦9,200.00</button>
+                </form>
+
+                <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+                    <p style="font-size: 0.8rem; color: #718096; margin-bottom: 10px;">Already made a transfer?</p>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="manual-ref" placeholder="Enter Reference" style="flex: 1; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.9rem;">
+                        <button onclick="checkManualStatus()" style="background: var(--royal-blue); color: white; border: none; padding: 0 15px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.8rem;">CONFIRM</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="payment-view">
+                <div class="expiry-box"><i class="fas fa-clock"></i> Expires in <span id="timer">60:00</span></div>
+                <p style="font-size: 0.9rem; color: #4A5568; margin-bottom: 15px;">Transfer exactly <strong>₦9,200.00</strong> to:</p>
+
+                <div class="bank-details-container">
+                    <span class="info-label">Bank Name</span>
+                    <div class="info-value" id="res-bank">---</div>
+
+                    <span class="info-label">Account Number</span>
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
+                        <div id="res-acc" style="font-size: 1.8rem; font-weight: 900; color: var(--dark-navy); letter-spacing: 1px;">0000000000</div>
+                        <button onclick="copyText('res-acc')" style="background: var(--royal-blue); color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.75rem; font-weight: bold; display: flex; align-items: center; gap: 6px;">
+                        <i class="fas fa-copy"></i> <span id="copy-text">COPY</span>
+                    </button>
+                    </div>
+
+                    <span class="info-label">Account Name</span>
+                    <div class="info-value" id="res-name" style="margin-bottom: 0;">---</div>
+
+                    <i class="fas fa-university" style="position: absolute; top: 20px; right: 20px; font-size: 1.5rem; color: #e2e8f0;"></i>
+                </div>
+
+                <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 25px; color: #718096; font-size: 0.85rem;">
+                    <div class="spinner-small" style="width: 14px; height: 14px; border: 2px solid #e2e8f0; border-top: 2px solid var(--emerald-green); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                    <span>Waiting for your transfer...</span>
+                </div>
+
+                <button onclick="openVerifyModal()" class="main-button" style="background: var(--dark-navy);">I've completed the transfer</button>
+
+                <div style="margin-top: 25px; padding: 15px; background: #f0f4f8; border-radius: 10px; border: 1px dashed #cbd5e0;">
+                    <span class="info-label" style="text-align: center; display: block;">Transaction Reference</span>
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin: 5px 0;">
+                        <span id="res-ref" style="font-family: 'Courier New', monospace; font-weight: 700; color: var(--royal-blue); font-size: 0.9rem;">---</span>
+                        <button onclick="copyReference()" style="background: #e2e8f0; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; color: var(--dark-navy); font-size: 0.7rem;">
+                        <i class="fas fa-copy"></i> COPY
+                    </button>
+                    </div>
+                    <p style="font-size: 0.65rem; color: #718096; margin: 5px 0 0; text-align: center; line-height: 1.3;">
+                        <i class="fas fa-info-circle"></i> <strong>Why copy this?</strong> Use this reference to verify your payment status manually or if you need to contact support regarding this transaction.
+                    </p>
+                </div>
+            </div>
+
+            <div id="success-view">
+                <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+                <h2 style="color: var(--dark-navy);">Payment Successful!</h2>
+                <p style="color: #718096; margin-bottom: 30px;">Redirecting you shortly...</p>
+                <a href="mailto:support@bizsecurepay.com.ng" class="main-button" style="background: var(--royal-blue); text-decoration: none; display: block;">Contact Merchant</a>
+            </div>
+        </div>
+
+        <div class="checkout-footer">
+            <i class="fas fa-shield-alt"></i> SECURED BY BIZSECUREPAY <br>
+            <a href="javascript:void(0)" onclick="openRefundModal()" style="color: #A0AEC0; text-decoration: underline; margin-top: 10px; display: inline-block;">Refund Policy</a>
+        </div>
+    </div>
+
+    <!-- Refund Policy Modal -->
+    <div id="refundModal" class="modal-overlay">
+        <div class="modal-content" style="text-align: left; max-width: 500px;">
+            <h3 style="color: var(--dark-navy); border-bottom: 2px solid var(--royal-blue); padding-bottom: 10px;">Refund Policy</h3>
+            <div style="font-size: 0.85rem; color: #4A5568; line-height: 1.6; max-height: 400px; overflow-y: auto; padding-right: 10px;">
+                <p>By proceeding with payment, you acknowledge that you are paying for professional skill services provided by the merchant.</p>
+                <p><strong>Refund requests may be considered within 24 hours of payment only if:</strong></p>
+                <ul style="padding-left: 20px;">
+                    <li>The payment was made in error (duplicate or incorrect amount).</li>
+                    <li>The service has not yet been started or delivered.</li>
+                    <li>The merchant approves the refund request.</li>
+                </ul>
+                <p>Once a skill service has been commenced, delivered, or completed, payments are generally non-refundable.</p>
+                <p>To request a refund, please contact <strong>support@bizsecurepay.com.ng</strong> within 24 hours of your payment and include your payment reference, full name, and reason for the request.</p>
+                <p>By making payment through BizSecurePay, you agree to this Refund Policy and the merchant's service terms.</p>
+            </div>
+            <button onclick="closeRefundModal()" class="main-button" style="background: var(--royal-blue); margin-top: 20px;">I Understand</button>
+        </div>
+    </div>
+
+    <!-- Verification Modal -->
+    <div id="verifyModal" class="modal-overlay">
+        <div class="modal-content">
+            <div id="modal-loading">
+                <div class="spinner-small" style="width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--royal-blue); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
+                <h3 style="margin: 0; color: var(--dark-navy);">Verifying Payment</h3>
+                <p style="color: #718096; font-size: 0.9rem;">Please wait while we confirm your transfer...</p>
+            </div>
+            <div id="modal-error" style="display: none;">
+                <i class="fas fa-exclamation-circle" style="font-size: 3rem; color: #E53E3E; margin-bottom: 15px;"></i>
+                <h3 style="margin: 0; color: var(--dark-navy);">Not Detected</h3>
+                <p style="color: #718096; font-size: 0.9rem; margin-bottom: 20px;">We haven't received your payment yet. It might take a few minutes for your bank to process the transfer.</p>
+                <button onclick="openVerifyModal()" class="main-button" style="background: var(--emerald-green); margin-bottom: 10px;">Check Again Now</button>
+                <button onclick="closeModal()" class="main-button" style="background: var(--royal-blue);">I'll wait a bit more</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let checkInterval;
+        let timerInterval;
+        let currentReference;
+        let simulateOffline = false; // when true we won't call server-side endpoints and will keep the UI in "waiting" state
+
+        // If the page was opened with bank/account details in the URL, pre-fill them and show the payment view
+        (function applyUrlPrefill() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const simBank = urlParams.get('bank_name');
+                const simAcc = urlParams.get('account_number');
+                const simName = urlParams.get('account_name');
+                const simAmount = urlParams.get('amount');
+                const simRef = urlParams.get('reference');
+
+                if (simBank || simAcc || simName) {
+                    simulateOffline = true;
+                    // populate visible fields
+                    document.getElementById('res-bank').innerText = simBank ? decodeURIComponent(simBank) : '---';
+                    document.getElementById('res-acc').innerText = simAcc ? decodeURIComponent(simAcc) : '0000000000';
+                    document.getElementById('res-name').innerText = simName ? decodeURIComponent(simName) : '---';
+                    const ref = simRef || ('REF' + Math.floor(Math.random() * 900000 + 100000));
+                    document.getElementById('res-ref').innerText = ref;
+                    currentReference = ref;
+
+                    // hide the form and show the payment instruction view immediately
+                    const f = document.getElementById('form-view');
+                    const p = document.getElementById('payment-view');
+                    if (f && p) {
+                        f.style.display = 'none';
+                        p.style.display = 'block';
+                        // start timer (1 hour default)
+                        startTimer(3600, document.querySelector('#timer'));
+                        // do not start checkInterval since there's no backend to poll — keep waiting UI
+                    }
+                }
+            } catch (e) {
+                console.error('Prefill check failed', e);
+            }
+        })();
+
+        function copyReference() {
+            const text = document.getElementById('res-ref').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Reference copied to clipboard!");
+            });
+        }
+
+        function copyText(id) {
+            const text = document.getElementById(id).innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const btnText = document.getElementById('copy-text');
+                const originalText = btnText.innerText;
+                btnText.innerText = "COPIED!";
+                setTimeout(() => btnText.innerText = originalText, 2000);
+            });
+        }
+
+        document.getElementById('paymentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Initializing...';
+
+            if (simulateOffline) {
+                // If we're simulating (opened from dashboard), simply populate and show the payment view
+                document.getElementById('res-bank').innerText = document.querySelector('input[name="bank_name"]') ? document.querySelector('input[name="bank_name"]').value : document.getElementById('res-bank').innerText;
+                document.getElementById('res-acc').innerText = document.querySelector('input[name="account_number"]') ? document.querySelector('input[name="account_number"]').value : document.getElementById('res-acc').innerText;
+                document.getElementById('res-name').innerText = document.querySelector('input[name="full_name"]') ? document.querySelector('input[name="full_name"]').value : document.getElementById('res-name').innerText;
+                const possibleRef = 'REF' + Math.floor(Math.random() * 900000 + 100000);
+                document.getElementById('res-ref').innerText = possibleRef;
+                currentReference = possibleRef;
+
+                document.getElementById('form-view').style.display = 'none';
+                document.getElementById('payment-view').style.display = 'block';
+                startTimer(3600, document.querySelector('#timer'));
+                // keep waiting UI — do not set checkInterval
+                return;
+            }
+
+            // Default behaviour (original) — call server to get bank details and reference
+            fetch('process_payment.php', {
+                    method: 'POST',
+                    body: new FormData(this)
+                })
+                .then(r => r.json())
+                .then(res => {
+                    if (res.status === 'success') {
+                        document.getElementById('res-bank').innerText = res.data.bank_name;
+                        document.getElementById('res-acc').innerText = res.data.account_number;
+                        document.getElementById('res-name').innerText = res.data.account_name;
+                        document.getElementById('res-ref').innerText = res.data.reference;
+                        currentReference = res.data.reference;
+
+                        document.getElementById('form-view').style.display = 'none';
+                        document.getElementById('payment-view').style.display = 'block';
+                        startTimer(3600, document.querySelector('#timer'));
+                        checkInterval = setInterval(checkStatus, 5000);
+                    } else {
+                        alert(res.message);
+                        btn.disabled = false;
+                        btn.innerText = 'Pay';
+                    }
+                }).catch(err => {
+                    console.error(err);
+                    alert('Payment initialization failed.');
+                    btn.disabled = false;
+                    btn.innerText = 'Pay';
+                });
+        });
+
+        function checkStatus() {
+            if (simulateOffline) return; // when simulating locally, skip polling
+            fetch('check_status.php?reference=' + currentReference)
+                .then(r => r.json()).then(d => {
+                    if (d.status === 'success') {
+                        clearInterval(checkInterval);
+                        closeModal();
+                        showSuccess();
+                    }
+                }).catch(e => console.error('Status check failed', e));
+        }
+
+        function showSuccess() {
+            clearInterval(timerInterval);
+            document.getElementById('payment-view').style.display = 'none';
+            document.getElementById('success-view').style.display = 'block';
+            setTimeout(() => {
+                window.location.href = "https://t.me/veloraplatformsoff?text=Hello%20velora%20Official,%20I%20have%20made%20my%20payment%20for%20Nextel%20Connect.%20Kindly%20activate%20my%20account%20so%20I%20can%20start%20earning.";
+            }, 4000);
+        }
+
+        function openVerifyModal() {
+            document.getElementById('verifyModal').style.display = 'flex';
+            document.getElementById('modal-loading').style.display = 'block';
+            document.getElementById('modal-error').style.display = 'none';
+
+            if (simulateOffline) {
+                // Keep the modal in a loading state to indicate "waiting for confirmation" — do not call server
+                return;
+            }
+
+            fetch('check_status.php?reference=' + currentReference)
+                .then(r => r.json())
+                .then(d => {
+                    if (d.status === 'success') {
+                        clearInterval(checkInterval);
+                        closeModal();
+                        showSuccess();
+                    } else {
+                        setTimeout(() => {
+                            document.getElementById('modal-loading').style.display = 'none';
+                            document.getElementById('modal-error').style.display = 'block';
+                        }, 1500);
+                    }
+                }).catch(e => {
+                    console.error('Verify failed', e);
+                    setTimeout(() => {
+                        document.getElementById('modal-loading').style.display = 'none';
+                        document.getElementById('modal-error').style.display = 'block';
+                    }, 1500);
+                });
+        }
+
+        function closeModal() {
+            document.getElementById('verifyModal').style.display = 'none';
+        }
+
+        function openRefundModal() {
+            document.getElementById('refundModal').style.display = 'flex';
+        }
+
+        function closeRefundModal() {
+            document.getElementById('refundModal').style.display = 'none';
+        }
+
+        function checkManualStatus() {
+            const ref = document.getElementById('manual-ref').value.trim();
+            if (!ref) {
+                alert("Please enter a transaction reference.");
+                return;
+            }
+            currentReference = ref;
+            openVerifyModal();
+        }
+
+        function startTimer(d, display) {
+            var t = d,
+                m, s;
+            timerInterval = setInterval(() => {
+                m = parseInt(t / 60, 10);
+                s = parseInt(t % 60, 10);
+                display.textContent = (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
+                if (--t < 0) location.reload();
+            }, 1000);
+        }
+    </script>
+</body>
+
+</html>

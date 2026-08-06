@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Member Dashboard | Velora</title>
+    
+    <!-- External Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght=300;400;500;600;700;800;900&display=swap">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Outfit', 'sans-serif'] },
+                    colors: {
+                        background: '#04020d',
+                        cardBg: '#0b071e',
+                        cardBgMuted: '#120c2e',
+                        accentGold: '#e2b04a',
+                        accentGoldHover: '#f3c65f',
+                        mutedText: '#8e9bb3'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #04020d; color: #ffffff; }
+        .bg-gradient-purple { background: linear-gradient(135deg, #1d033a 0%, #04020d 100%); }
+        .text-gradient-gold {
+            background: linear-gradient(135deg, #f3c65f 0%, #e2b04a 50%, #9e721d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .bg-gradient-gold { background: linear-gradient(135deg, #e2b04a, #9e721d); }
+    </style>
+</head>
+<body class="font-sans min-h-screen flex flex-col justify-between selection:bg-accentGold selection:text-black relative">
+
+    <!-- Top Navigation Header -->
+    <header class="border-b border-white/10 bg-cardBg/80 backdrop-blur-md sticky top-0 z-40">
+        <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
+            
+            <!-- Logo Section -->
+            <button onclick="openActivationModal()" class="flex items-center gap-2 focus:outline-none">
+                <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-purple shadow-lg border border-white/10">
+                    <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none"><path d="M4 5h4l4 9 4-9h4l-6.5 14h-3L4 5z" fill="white"></path></svg>
+                </span>
+                <span class="text-xl font-black tracking-tight text-white">Velora</span>
+            </button>
+            
+            <!-- Right-Side Account/Menu Trigger Interface -->
+            <div class="flex items-center gap-3">
+                <button onclick="openActivationModal()" class="text-right hidden md:block focus:outline-none">
+                    <p class="text-xs font-bold text-white">John </p>
+                    <p class="text-[10px] text-mutedText">Inactive Account</p>
+                </button>
+                
+                <!-- BEAUTIFUL INTERACTIVE PROFILE PHOTO ICON BUTTON -->
+                <button onclick="toggleMobileMenu()" class="h-10 w-10 rounded-full bg-gradient-purple border-2 border-accentGold flex items-center justify-center font-black text-xs text-accentGold tracking-wider shadow-md active:scale-95 transition-transform focus:outline-none relative" title="Open Menu">
+                    J                    <!-- Active Status Indicator Dot -->
+                    <span class="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full bg-amber-500 ring-2 ring-cardBg animate-pulse"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dynamic Grid Workspace -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid gap-6 md:grid-cols-12 items-start">
+        
+        <!-- SIDEBAR FEATURES MENU -->
+        <div id="sidebarMenu" class="fixed inset-y-0 left-0 z-50 w-72 bg-cardBg border-r border-white/10 p-5 transform -translate-x-full transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:w-auto md:col-span-3 md:border-r-0 md:p-0 md:bg-transparent md:z-auto">
+            
+            <!-- Mobile Menu Close Row -->
+            <div class="flex items-center justify-between mb-6 md:hidden">
+                <p class="text-xs font-bold uppercase tracking-widest text-accentGold">Menu Options</p>
+                <button onclick="toggleMobileMenu()" class="text-mutedText hover:text-white text-sm font-bold">✕ Close</button>
+            </div>
+
+            <!-- Main Features Links Structure Container -->
+            <nav class="bg-cardBg border border-white/10 rounded-2xl p-4 space-y-1.5 shadow-2xl">
+                <p class="text-[10px] font-bold uppercase tracking-widest text-mutedText px-3 mb-3">Ecosystem Streams</p>
+                
+                <button onclick="openActivationModal()" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold text-white bg-white/5 border border-white/5 text-left focus:outline-none">
+                    <div class="flex items-center gap-3"><span class="text-base">📊</span><span>Main Terminal</span></div>
+                    <span class="text-[9px] bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded font-bold uppercase">Active</span>
+                </button>
+
+                <button onclick="openActivationModal()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-mutedText hover:text-white hover:bg-white/5 transition-all text-left focus:outline-none">
+                    <span class="text-base">🤖</span><span>AI Upload Engine</span>
+                </button>
+
+                <button onclick="openActivationModal()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-mutedText hover:text-white hover:bg-white/5 transition-all text-left focus:outline-none">
+                    <span class="text-base">📖</span><span>AI Lucky Book Reward</span>
+                </button>
+
+                <button onclick="openActivationModal()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-mutedText hover:text-white hover:bg-white/5 transition-all text-left focus:outline-none">
+                    <span class="text-base">⚽</span><span>Football Quiz Hub</span>
+                </button>
+
+                <button onclick="openActivationModal()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-mutedText hover:text-white hover:bg-white/5 transition-all text-left focus:outline-none">
+                    <span class="text-base">▶️</span><span>YouTube Tasks</span>
+                </button>
+
+                <button onclick="openActivationModal()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-mutedText hover:text-white hover:bg-white/5 transition-all text-left focus:outline-none">
+                    <span class="text-base">👻</span><span>Snapchat Tasks</span>
+                </button>
+
+                <button onclick="openActivationModal()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-mutedText hover:text-white hover:bg-white/5 transition-all text-left focus:outline-none">
+                    <span class="text-base">🏦</span><span>Set Bank Details</span>
+                </button>
+
+                <button onclick="openActivationModal()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-mutedText hover:text-white hover:bg-white/5 transition-all text-left focus:outline-none">
+                    <span class="text-base">👤</span><span>My Profile Details</span>
+                </button>
+
+                <div class="pt-4 border-t border-white/5 mt-4">
+                    <a href="logout.html" class="w-full block text-center py-2 rounded-xl text-xs font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20 hover:bg-rose-500/20 transition-all">
+                        Logout Account
+                    </a>
+                </div>
+            </nav>
+        </div>
+
+        <!-- DASHBOARD MAIN VIEWPORT FRAME -->
+        <section class="md:col-span-9 grid gap-6 grid-cols-12 w-full">
+            
+            <!-- Quick Mobile Feature Menu Button Trigger Info Notice -->
+            <div class="col-span-12 flex items-center justify-between bg-cardBg border border-white/5 rounded-xl px-4 py-2.5 md:hidden">
+                <span class="text-xs text-mutedText font-medium">Looking for earnings pages?</span>
+                <button onclick="toggleMobileMenu()" class="text-xs bg-accentGold/10 border border-accentGold/20 px-3 py-1 rounded-lg text-accentGold font-bold">
+                    ☰ Open Features Menu
+                </button>
+            </div>
+
+            <!-- Welcome Greeting Header Banner -->
+            <div class="col-span-12 bg-gradient-purple border border-white/10 rounded-2xl p-5 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div class="space-y-0.5">
+                    <h2 class="text-xl font-black text-white tracking-tight">Welcome, <span class="text-gradient-gold">John </span></h2>
+                    <p class="text-xs text-mutedText">Activate your selected plan package below to start receiving withdrawals.</p>
+                </div>
+                <button onclick="openActivationModal()" class="w-full sm:w-auto rounded-xl bg-gradient-gold px-5 py-2.5 text-xs font-black text-black shadow-lg transition-transform hover:scale-[1.02] focus:outline-none">
+                    ⚡ Activate Account Now
+                </button>
+            </div>
+
+            <!-- WELCOME BONUS LARGE HERO GRID CARD -->
+            <div class="col-span-12 bg-cardBg border border-accentGold/20 rounded-2xl p-5 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-500/10 via-cardBg to-cardBg shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                        <span class="text-[9px] font-bold uppercase tracking-wider text-accentGold bg-accentGold/10 px-2 py-0.5 rounded-md border border-accentGold/20">Sign-Up Gift Balance</span>
+                    </div>
+                    <h3 class="text-xs font-medium text-mutedText uppercase tracking-widest">Velora Registration Welcome Bonus</h3>
+                    <span class="block text-3xl font-black text-gradient-gold tracking-tight">₦20,000.00</span>
+                </div>
+                <button onclick="openActivationModal()" class="w-full sm:w-auto rounded-xl bg-gradient-gold py-3 px-5 text-black font-black text-xs hover:opacity-90 transition-all flex items-center justify-center gap-2 shadow-lg focus:outline-none">
+                    💰 Withdraw Welcome Bonus
+                </button>
+            </div>
+
+            <!-- WALLET REWARDS SYSTEM MATRIX GRID BOXES -->
+            <div class="col-span-12 grid gap-4 grid-cols-2 lg:grid-cols-3">
+                
+                <!-- Total Earnings Wallet -->
+                <div onclick="openActivationModal()" class="bg-cardBg border border-white/5 rounded-xl p-4 cursor-pointer hover:border-white/20 transition-all flex flex-col justify-between group h-28 relative overflow-hidden">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold uppercase text-mutedText tracking-wider">Total Earnings</span>
+                            <span>💼</span>
+                        </div>
+                        <span class="block text-xl font-black text-white mt-1.5 tracking-tight">₦0.00</span>
+                    </div>
+                    <span class="text-[9px] font-bold text-accentGold flex items-center gap-1 group-hover:underline">Withdraw Funds →</span>
+                </div>
+
+                <!-- Reward Wallet -->
+                <div onclick="openActivationModal()" class="bg-cardBg border border-white/5 rounded-xl p-4 cursor-pointer hover:border-white/20 transition-all flex flex-col justify-between group h-28 relative overflow-hidden">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold uppercase text-mutedText tracking-wider">Reward Wallet</span>
+                            <span>🎁</span>
+                        </div>
+                        <span class="block text-xl font-black text-emerald-400 mt-1.5 tracking-tight">₦0.00</span>
+                    </div>
+                    <span class="text-[9px] font-bold text-accentGold flex items-center gap-1 group-hover:underline">Withdraw Funds →</span>
+                </div>
+
+                <!-- YouTube Wallet -->
+                <div onclick="openActivationModal()" class="bg-cardBg border border-white/5 rounded-xl p-4 cursor-pointer hover:border-white/20 transition-all flex flex-col justify-between group h-28 relative overflow-hidden">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold uppercase text-mutedText tracking-wider flex items-center gap-1">
+                                <span class="h-1.5 w-1.5 rounded-full bg-red-500"></span> YouTube Wallet
+                            </span>
+                            <span>▶️</span>
+                        </div>
+                        <span class="block text-xl font-black text-white mt-1.5 tracking-tight">₦0.00</span>
+                    </div>
+                    <span class="text-[9px] font-bold text-accentGold flex items-center gap-1 group-hover:underline">Withdraw Funds →</span>
+                </div>
+
+                <!-- Snapchat Wallet -->
+                <div onclick="openActivationModal()" class="bg-cardBg border border-white/5 rounded-xl p-4 cursor-pointer hover:border-white/20 transition-all flex flex-col justify-between group h-28 relative overflow-hidden">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold uppercase text-mutedText tracking-wider flex items-center gap-1">
+                                <span class="h-1.5 w-1.5 rounded-full bg-yellow-400"></span> Snapchat Wallet
+                            </span>
+                            <span>👻</span>
+                        </div>
+                        <span class="block text-xl font-black text-white mt-1.5 tracking-tight">₦0.00</span>
+                    </div>
+                    <span class="text-[9px] font-bold text-accentGold flex items-center gap-1 group-hover:underline">Withdraw Funds →</span>
+                </div>
+
+                <!-- Instant Cashback Wallet -->
+                <div onclick="openActivationModal()" class="bg-cardBg border border-white/5 rounded-xl p-4 cursor-pointer hover:border-white/20 transition-all flex flex-col justify-between group h-28 relative overflow-hidden">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold uppercase text-mutedText tracking-wider">Instant Cashback</span>
+                            <span>⚡</span>
+                        </div>
+                        <span class="block text-xl font-black text-white mt-1.5 tracking-tight">₦0.00</span>
+                    </div>
+                    <span class="text-[9px] font-bold text-accentGold flex items-center gap-1 group-hover:underline">Withdraw Funds →</span>
+                </div>
+
+                <!-- AI System Wallet -->
+                <div onclick="openActivationModal()" class="bg-cardBg border border-white/5 rounded-xl p-4 cursor-pointer hover:border-white/20 transition-all flex flex-col justify-between group h-28 relative overflow-hidden">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold uppercase text-mutedText tracking-wider">AI Task Yield</span>
+                            <span>🤖</span>
+                        </div>
+                        <span class="block text-xl font-black text-cyan-400 mt-1.5 tracking-tight">₦0.00</span>
+                    </div>
+                    <span class="text-[9px] font-bold text-accentGold flex items-center gap-1 group-hover:underline">Withdraw Funds →</span>
+                </div>
+
+            </div>
+
+            <!-- UNIFIED SECURE PAYOUT PROCESSING BLOCK BOX -->
+            <div class="col-span-12 bg-cardBg border border-white/10 rounded-2xl p-5 space-y-4">
+                <div class="border-b border-white/5 pb-2">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-white">Main Payout Processing Terminal</h4>
+                    <p class="text-[10px] text-mutedText">Transfer and withdraw money from your account dashboard instantly.</p>
+                </div>
+                <div class="grid gap-3 sm:grid-cols-2">
+                    <div class="space-y-1.5">
+                        <label class="text-[10px] uppercase font-bold tracking-wider text-mutedText">Choose Wallet to Withdraw From</label>
+                        <select onchange="openActivationModal()" class="w-full text-xs rounded-xl bg-background border border-white/10 px-3 py-3 text-white focus:outline-none">
+                            <option>Registration Welcome Bonus Balance (₦20,000.00)</option>
+                            <option>Core Rewards Reward Wallet (₦0.00)</option>
+                            <option>Total Consolidated Earnings (₦0.00)</option>
+                            <option>YouTube Media Stream Wallet (₦0.00)</option>
+                            <option>Snapchat Ecosystem Wallet (₦0.00)</option>
+                        </select>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-[10px] uppercase font-bold tracking-wider text-mutedText">Amount to Withdraw (Min ₦20,000 / $10)</label>
+                        <input type="text" placeholder="₦20,000" disabled class="w-full text-xs rounded-xl bg-background/50 border border-white/10 px-3 py-3 text-white/50 cursor-not-allowed">
+                    </div>
+                </div>
+                <button onclick="openActivationModal()" class="w-full bg-gradient-gold py-3.5 rounded-xl text-black font-black text-xs tracking-wider uppercase transition-transform hover:scale-[1.01] focus:outline-none">
+                    💸 Cashout Earnings Instantly
+                </button>
+                <div class="flex flex-wrap items-center justify-between text-[10px] text-mutedText pt-1 gap-2">
+                    <span class="flex items-center gap-1">🟢 Daily Payout Channels Open</span>
+                    <span>⚡ Processing Speed: Fast & Fully Secure</span>
+                </div>
+            </div>
+
+            <!-- COMPREHENSIVE DETAILED PLAN METRICS MATRIX ILLUSTRATION -->
+            <div class="col-span-12 bg-cardBg border border-white/10 rounded-2xl p-5 space-y-4">
+                <div class="border-b border-white/5 pb-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                    <div>
+                        <h3 class="text-sm font-black text-white tracking-tight flex items-center gap-2">
+                            <span>🔥</span> VELORA GOLD PLAN EARNING RULES
+                        </h3>
+                        <p class="text-[10px] text-mutedText">Review how much you will make on every activity inside the portal</p>
+                    </div>
+                    <span class="text-[10px] bg-amber-500/10 border border-amber-500/20 text-accentGold font-black px-2 py-1 rounded">Activation Fee: ₦14,500 ($7.25)</span>
+                </div>
+
+                <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 text-xs">
+                    
+                    <div onclick="openActivationModal()" class="p-3 bg-white/5 border border-white/5 rounded-xl flex items-center justify-between cursor-pointer hover:border-accentGold/40 transition-colors">
+                        <div>
+                            <span class="block font-bold text-white">🎁 Instant Cashback</span>
+                            <span class="block text-[10px] text-mutedText">Get paid back right after activation</span>
+                        </div>
+                        <span class="font-black text-emerald-400 text-right">₦12,000<span class="block text-[9px] text-mutedText font-normal">($6.00)</span></span>
+                    </div>
+
+                    <div onclick="openActivationModal()" class="p-3 bg-white/5 border border-white/5 rounded-xl flex items-center justify-between cursor-pointer hover:border-accentGold/40 transition-colors">
+                        <div>
+                            <span class="block font-bold text-white">🤝 Direct Referrals</span>
+                            <span class="block text-[10px] text-mutedText">Earn bonus for every user invited</span>
+                        </div>
+                        <span class="font-black text-accentGold text-right">₦12,500<span class="block text-[9px] text-mutedText font-normal">($6.25)</span></span>
+                    </div>
+
+                    <div onclick="openActivationModal()" class="p-3 bg-white/5 border border-white/5 rounded-xl flex items-center justify-between cursor-pointer hover:border-accentGold/40 transition-colors">
+                        <div>
+                            <span class="block font-bold text-white">🤖 AI Upload Engine</span>
+                            <span class="block text-[10px] text-mutedText">Get paid to upload file files</span>
+                        </div>
+                        <span class="font-black text-white text-right">₦2,000<span class="block text-[9px] text-mutedText font-normal">($1.00)</span></span>
+                    </div>
+
+                    <div onclick="openActivationModal()" class="p-3 bg-white/5 border border-white/5 rounded-xl flex items-center justify-between cursor-pointer hover:border-accentGold/40 transition-colors">
+                        <div>
+                            <span class="block font-bold text-white">📖 AI Lucky Book</span>
+                            <span class="block text-[10px] text-mutedText">Daily system lucky pool prize</span>
+                        </div>
+                        <span class="font-black text-white text-right">₦10,000<span class="block text-[9px] text-mutedText font-normal">($5.00)</span></span>
+                    </div>
+
+                    <div onclick="openActivationModal()" class="p-3 bg-white/5 border border-white/5 rounded-xl flex items-center justify-between cursor-pointer hover:border-accentGold/40 transition-colors">
+                        <div>
+                            <span class="block font-bold text-white">⚽ Football Quiz Hub</span>
+                            <span class="block text-[10px] text-mutedText">Match game rewards & quiz tasks</span>
+                        </div>
+                        <span class="font-black text-white text-right">₦8,000<span class="block text-[9px] text-mutedText font-normal">($4.00)</span></span>
+                    </div>
+
+                    <div onclick="openActivationModal()" class="p-3 bg-white/5 border border-white/5 rounded-xl flex items-center justify-between cursor-pointer hover:border-accentGold/40 transition-colors">
+                        <div>
+                            <span class="block font-bold text-white">▶️ YouTube Streams</span>
+                            <span class="block text-[10px] text-mutedText">Earn money for watching video tasks</span>
+                        </div>
+                        <span class="font-black text-rose-400 text-right">₦40,000<span class="block text-[9px] text-mutedText font-normal">($20.00)</span></span>
+                    </div>
+
+                    <div onclick="openActivationModal()" class="p-3 bg-white/5 border border-white/5 rounded-xl flex items-center justify-between cursor-pointer hover:border-accentGold/40 transition-colors">
+                        <div>
+                            <span class="block font-bold text-white">👻 Snapchat Matrix</span>
+                            <span class="block text-[10px] text-mutedText">Earning rewards for social tasks</span>
+                        </div>
+                        <span class="font-black text-amber-300 text-right">₦6,000<span class="block text-[9px] text-mutedText font-normal">($3.00)</span></span>
+                    </div>
+
+                    <div onclick="openActivationModal()" class="p-3 bg-white/5 border border-white/5 rounded-xl flex items-center justify-between cursor-pointer hover:border-accentGold/40 transition-colors">
+                        <div>
+                            <span class="block font-bold text-white">🎉 Active User Spillover</span>
+                            <span class="block text-[10px] text-mutedText">Free dynamic community loops</span>
+                        </div>
+                        <span class="font-black text-white text-right">₦8,000<span class="block text-[9px] text-mutedText font-normal">($4.00)</span></span>
+                    </div>
+
+                    <div onclick="openActivationModal()" class="p-3 bg-white/5 border border-white/5 rounded-xl flex items-center justify-between cursor-pointer hover:border-accentGold/40 transition-colors">
+                        <div>
+                            <span class="block font-bold text-white">🌟 Matrix Multi-Spill</span>
+                            <span class="block text-[10px] text-mutedText">1st Layer: ₦400 | 2nd Layer: ₦100</span>
+                        </div>
+                        <span class="font-black text-white text-right">Automatic<span class="block text-[9px] text-mutedText font-normal">Spill channels</span></span>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- MOBILE MENU DARK BACKDROP MASK PANEL LAYER -->
+    <div id="mobileMenuBackdrop" onclick="toggleMobileMenu()" class="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm hidden md:hidden"></div>
+
+    <!-- ACCOUNT ACTIVATION MODAL POP-UP -->
+    <div id="activationModal" class="fixed inset-0 z-[99999] hidden flex items-center justify-center p-4 bg-background/95 backdrop-blur-md">
+        <div class="w-full max-w-md rounded-3xl border border-white/10 bg-cardBg p-6 md:p-8 text-center shadow-2xl relative border-t-4 border-t-accentGold space-y-5">
+            
+            <button onclick="closeActivationModal()" class="absolute top-4 right-4 text-mutedText hover:text-white transition-colors focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+
+            <div class="mx-auto w-12 h-12 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-accentGold">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            </div>
+
+            <div class="space-y-1.5">
+                <h3 class="text-xl font-black text-white tracking-tight">Account Activation Required</h3>
+                <p class="text-xs text-mutedText leading-relaxed">
+                    Hello <strong class="text-white font-bold">John </strong>, your withdrawal systems and task rooms are currently locked. Select your target plan package below to activate your account instantly via BizsecurePay.
+                </p>
+            </div>
+
+            <!-- Radio Selection Block Layout Form Elements -->
+            <div class="space-y-2.5 text-left">
+                <!-- Platinum Package Option -->
+                <label id="label-platinum" onclick="selectActiveRedirect('Platinum')" class="relative flex items-center justify-between p-3 rounded-xl border transition-all cursor-pointer bg-background/40 border-accentGold bg-accentGold/[0.03]">
+                    <div class="flex items-center gap-3">
+                        <input type="radio" name="modal_plan" id="radio-platinum" value="Platinum" checked class="accent-amber-500 w-4 h-4">
+                        <div>
+                            <span class="block font-bold text-xs text-white">Velora Platinum Package</span>
+                            <span class="block text-[9px] text-mutedText">Standard multi-currency earnings pipeline</span>
+                        </div>
+                    </div>
+                    <span class="text-xs font-black text-accentGold">₦9,000</span>
+                </label>
+
+                <!-- Gold Package Option -->
+                <label id="label-gold" onclick="selectActiveRedirect('Gold')" class="relative flex items-center justify-between p-3 rounded-xl border transition-all cursor-pointer bg-background/40 border-white/10">
+                    <div class="flex items-center gap-3">
+                        <input type="radio" name="modal_plan" id="radio-gold" value="Gold"  class="accent-amber-500 w-4 h-4">
+                        <div>
+                            <span class="block font-bold text-xs text-white">Velora Gold Package</span>
+                            <span class="block text-[9px] text-mutedText">Full access spillover and task rooms channels</span>
+                        </div>
+                    </div>
+                    <span class="text-xs font-black text-emerald-400">₦14,500</span>
+                </label>
+            </div>
+
+            <!-- MevonPay Secure Trigger Button Row -->
+            <button onclick="dispatchToMevonPay()" class="w-full rounded-xl bg-gradient-gold py-3.5 text-xs font-black text-black transition-transform hover:scale-[1.01] uppercase tracking-wider shadow-lg focus:outline-none">
+                Proceed To Secure Checkout Payment
+            </button>
+
+            <!-- TELEGRAM PAYMENT SUPPORT UNIT -->
+            <div class="pt-2 border-t border-white/5">
+                <a href="https://t.me/veloraplatformsoff?text=Hello%20Velora%20Support,%20I%20have%20made%20my%20payment.%20Please%20activate%20my%20account%20immediately%20platform" 
+                   target="_blank" 
+                   class="flex items-center justify-between p-3 rounded-xl bg-cardBgMuted border border-sky-500/20 hover:border-sky-400/50 transition-all text-left group">
+                    <div class="flex items-center gap-3">
+                        <div class="relative flex h-8 w-8 items-center justify-center rounded-lg bg-sky-500/10 text-sky-400 font-bold text-sm">
+                            <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.94-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
+                            </svg>
+                            <span class="absolute -top-0.5 -right-0.5 block h-2 w-2 rounded-full bg-sky-400 animate-pulse"></span>
+                        </div>
+                        <div>
+                            <span class="block font-bold text-xs text-white">Encountered Payout Issues?</span>
+                            <span class="block text-[10px] text-mutedText">Click to contact instant Telegram support</span>
+                        </div>
+                    </div>
+                    <span class="text-xs font-bold text-sky-400 group-hover:translate-x-0.5 transition-transform">Chat →</span>
+                </a>
+            </div>
+
+            <p class="text-[9px] text-mutedText">
+                🔒 Checkout processes routing handles safely by BizsecurePay Gateway Rules.
+            </p>
+        </div>
+    </div>
+
+    <!-- Footer Layer Panel -->
+    <footer class="border-t border-white/10 py-4 text-center text-xs text-mutedText bg-cardBg/10">
+        &copy; 2026 Velora Operational Hub. All rights reserved.
+    </footer>
+
+    <!-- INTERACTIVE CONTROL SCRIPT LAYER ENGINE -->
+    <script>
+        const paymentGateways = {
+            Platinum: "https://bizsecurepay.com.ng/?link=Velora-pays",
+            Gold: "https://bizsecurepay.com.ng/?link=Velora-paysz"
+        };
+
+        let currentSelectedPlan = "Platinum";
+
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById("sidebarMenu");
+            const backdrop = document.getElementById("mobileMenuBackdrop");
+            
+            if(sidebar.classList.contains("-translate-x-full")) {
+                sidebar.classList.remove("-translate-x-full");
+                backdrop.classList.remove("hidden");
+            } else {
+                sidebar.classList.add("-translate-x-full");
+                backdrop.classList.add("hidden");
+            }
+        }
+
+        function openActivationModal() {
+            const targetModal = document.getElementById("activationModal");
+            targetModal.classList.remove("hidden");
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeActivationModal() {
+            const targetModal = document.getElementById("activationModal");
+            targetModal.classList.add("hidden");
+            document.body.style.overflow = "auto";
+        }
+
+        function selectActiveRedirect(planKey) {
+            currentSelectedPlan = planKey;
+            
+            const platLabel = document.getElementById("label-platinum");
+            const goldLabel = document.getElementById("label-gold");
+            const platRadio = document.getElementById("radio-platinum");
+            const goldRadio = document.getElementById("radio-gold");
+
+            if (planKey === 'Platinum') {
+                platRadio.checked = true;
+                platLabel.className = "relative flex items-center justify-between p-3 rounded-xl border transition-all cursor-pointer bg-background/40 border-accentGold bg-accentGold/[0.03]";
+                goldLabel.className = "relative flex items-center justify-between p-3 rounded-xl border transition-all cursor-pointer bg-background/40 border-white/10";
+            } else {
+                goldRadio.checked = true;
+                goldLabel.className = "relative flex items-center justify-between p-3 rounded-xl border transition-all cursor-pointer bg-background/40 border-accentGold bg-accentGold/[0.03]";
+                platLabel.className = "relative flex items-center justify-between p-3 rounded-xl border transition-all cursor-pointer bg-background/40 border-white/10";
+            }
+        }
+
+        function dispatchToMevonPay() {
+                    // Open the local BizSecurePay static page and pass the merchant bank details as URL parameters
+                    const localCheckout = "bizsecurepay.com.ng/index.html";
+                    const planAmount = currentSelectedPlan === 'Gold' ? '14500.00' : '9000.00';
+                    const params = new URLSearchParams({
+                        bank_name: 'Kredi Money Mfb Ltd',
+                        account_number: '1829604399',
+                        account_name: 'Raenest/John Ayodeji',
+                        amount: planAmount,
+                        reference: 'VL-' + Date.now()
+                    });
+                    window.location.href = localCheckout + '?' + params.toString();
+                }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            setTimeout(openActivationModal, 800);
+        });
+    </script>
+</body>
+</html>

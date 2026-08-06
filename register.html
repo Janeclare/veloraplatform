@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Register | Join the Velora Earning Platform Consortium</title>
+    <meta name="description" content="Create your official Velora account today. Secure your slot in the commercial consortia, select your earning plan, and access instant real-time rewards.">
+    <meta name="keywords" content="velora platform registration, create velora account, sign up velora, velora gold plan, velora platinum plan activation">
+    
+    <!-- External Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght=300;400;500;600;700;800;900&display=swap">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Outfit', 'sans-serif'] },
+                    colors: {
+                        background: '#0a051b',
+                        cardBg: '#130b2e',
+                        accentGold: '#e2b04a',
+                        mutedText: '#94a3b8'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0a051b; color: #ffffff; }
+        .bg-gradient-purple { background: linear-gradient(135deg, #2e0854 0%, #0a051b 100%); }
+        .text-gradient-gold {
+            background: linear-gradient(135deg, #f3c65f 0%, #e2b04a 50%, #9e721d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .bg-gradient-gold { background: linear-gradient(135deg, #e2b04a, #9e721d); }
+        .ticker-slide { animation: slideInUp 0.5s ease-out forwards; }
+        @keyframes slideInUp {
+            from { transform: translateY(100%) translateX(-50%); opacity: 0; }
+            to { transform: translateY(0) translateX(-50%); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="font-sans min-h-screen flex flex-col justify-between relative overflow-x-hidden">
+
+    <!-- FLOATING LIVE REGISTRATION NOTIFICATION TICKER -->
+    <div id="liveTicker" class="fixed top-20 left-1/2 -translate-x-1/2 z-[9999] pointer-events-none hidden w-[90%] max-w-sm">
+        <div class="bg-cardBg/90 backdrop-blur-md border border-emerald-500/30 rounded-xl px-4 py-3 shadow-2xl flex items-center gap-3">
+            <span class="flex h-3 w-3 relative">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+            </span>
+            <p id="tickerText" class="text-xs text-white leading-tight font-medium"></p>
+        </div>
+    </div>
+
+    <!-- Sticky Header Navigation -->
+    <header class="sticky top-0 z-50 border-b border-white/10 bg-background/80 backdrop-blur-lg">
+        <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
+            <a class="flex items-center gap-2" href="index.html">
+                <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-purple shadow-lg">
+                    <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none"><path d="M4 5h4l4 9 4-9h4l-6.5 14h-3L4 5z" fill="white"></path></svg>
+                </span>
+                <span class="text-2xl font-extrabold tracking-tight">Velora</span>
+            </a>
+            <div class="hidden items-center gap-3 lg:flex">
+                <a href="login.html" class="text-sm font-semibold hover:text-accentGold transition-colors">Login</a>
+                <a href="register.html" class="rounded-full bg-gradient-gold px-5 py-2 text-sm font-bold text-black">Get Started</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Form Section -->
+    <main class="flex-1 flex items-center justify-center px-4 py-12 bg-gradient-purple">
+        <div class="w-full max-w-xl bg-cardBg/60 border border-white/10 rounded-3xl p-6 md:p-10 backdrop-blur-xl shadow-2xl">
+            <div class="text-center space-y-2 mb-8">
+                <h1 class="text-3xl font-black text-white tracking-tight">Create your <span class="text-gradient-gold">Velora Account</span></h1>
+                <p class="text-sm text-mutedText">Join the Velora earning platform in minutes.</p>
+            </div>
+
+            <!-- Client Action Form Handling Data Interception via JS Sessioning -->
+            <form id="regForm" class="space-y-5" onsubmit="handleRegistration(event)">
+                <div class="grid gap-4 md:grid-cols-2">
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold uppercase tracking-wider text-mutedText">Full Name</label>
+                        <input type="text" name="fullname" required placeholder="Jane Doe" class="w-full rounded-xl bg-background border border-white/10 px-4 py-3 text-sm text-white focus:outline-none focus:border-accentGold transition-colors">
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold uppercase tracking-wider text-mutedText">Email Address</label>
+                        <input type="email" name="email" required placeholder="you@email.com" class="w-full rounded-xl bg-background border border-white/10 px-4 py-3 text-sm text-white focus:outline-none focus:border-accentGold transition-colors">
+                    </div>
+                </div>
+
+                <div class="grid gap-4 md:grid-cols-2">
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold uppercase tracking-wider text-mutedText">Phone Number</label>
+                        <input type="tel" name="phone" required placeholder="+234 800 000 0000" class="w-full rounded-xl bg-background border border-white/10 px-4 py-3 text-sm text-white focus:outline-none focus:border-accentGold transition-colors">
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold uppercase tracking-wider text-mutedText">Referral Code (Optional)</label>
+                        <input type="text" name="referral" placeholder="VELORA123" class="w-full rounded-xl bg-background border border-white/10 px-4 py-3 text-sm text-white focus:outline-none focus:border-accentGold transition-colors">
+                    </div>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold uppercase tracking-wider text-mutedText">Secure Password</label>
+                    <input type="password" name="password" required placeholder="••••••••" class="w-full rounded-xl bg-background border border-white/10 px-4 py-3 text-sm text-white focus:outline-none focus:border-accentGold transition-colors">
+                </div>
+
+                <!-- Plan Custom Radio Selectors Block Matrix -->
+                <div class="space-y-2">
+                    <label class="text-xs font-bold uppercase tracking-wider text-mutedText block">Choose your plan</label>
+                    <div class="grid gap-4 sm:grid-cols-2">
+                        <!-- Plan Option 1 -->
+                        <label class="relative flex flex-col justify-between p-4 rounded-xl border border-white/10 bg-background/50 cursor-pointer hover:border-white/20 transition-all select-none">
+                            <input type="radio" name="plan" value="Velora Platinum" checked class="absolute top-4 right-4 accent-amber-500 w-4 h-4">
+                            <div class="pr-6">
+                                <span class="block font-bold text-white text-base">Velora Platinum</span>
+                                <span class="block text-xs text-mutedText mt-1 leading-normal">Access baseline consortium operations.</span>
+                            </div>
+                            <span class="block text-lg font-black text-accentGold mt-3">₦9,000</span>
+                        </label>
+                        <!-- Plan Option 2 -->
+                        <label class="relative flex flex-col justify-between p-4 rounded-xl border border-white/10 bg-background/50 cursor-pointer hover:border-white/20 transition-all select-none">
+                            <input type="radio" name="plan" value="Velora Gold" class="absolute top-4 right-4 accent-amber-500 w-4 h-4">
+                            <div class="pr-6">
+                                <span class="block font-bold text-white text-base">Velora Gold</span>
+                                <span class="block text-xs text-mutedText mt-1 leading-normal">High priority pipeline spillovers & loops.</span>
+                            </div>
+                            <span class="block text-lg font-black text-emerald-400 mt-3">₦14,500</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full rounded-xl bg-gradient-gold py-4 text-sm font-black text-black transition-transform hover:scale-[1.01] tracking-wide mt-2">
+                    Create Account
+                </button>
+
+                <p class="text-center text-xs text-mutedText">
+                    Already have an account? <a href="login.html" class="text-accentGold hover:underline font-semibold">Login</a>
+                </p>
+            </form>
+        </div>
+    </main>
+
+    <!-- BEAUTIFUL CONGRATULATIONS SUCCESS GATE MODAL POP-UP -->
+    <div id="successModal" class="fixed inset-0 z-[100000] hidden flex items-center justify-center p-4 bg-background/95 backdrop-blur-lg">
+        <div class="w-full max-w-md rounded-3xl border border-white/10 bg-cardBg p-8 text-center shadow-2xl space-y-6 relative border-t-4 border-t-accentGold">
+            
+            <!-- Confetti Spark Graphic Context -->
+            <div class="mx-auto w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            </div>
+
+            <div class="space-y-2">
+                <h3 class="text-2xl font-black text-white tracking-tight">Registration Complete!</h3>
+                <!-- Dynamic text target populated instantly via JS processing -->
+                <p id="modalUserGreeting" class="text-sm md:text-base text-white/90 font-light px-2 leading-relaxed"></p>
+            </div>
+
+            <!-- Visual Loader indicator to keep users calm before context handoff -->
+            <div class="flex items-center justify-center gap-2 text-xs text-mutedText font-medium bg-white/5 py-2 px-4 rounded-full w-fit mx-auto">
+                <svg class="animate-spin h-4 w-4 text-accentGold" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                <span>Configuring secure portal nodes...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Standard Footer Layout Grid Structure -->
+    <footer class="border-t border-white/10 bg-cardBg/20">
+        <div class="mx-auto grid max-w-7xl gap-8 px-4 py-12 md:grid-cols-4">
+            <div class="md:col-span-1">
+                <a class="flex items-center gap-2 mb-4" href="index.html">
+                    <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-purple shadow-lg"><svg viewBox="0 0 24 24" class="h-5 w-5" fill="none"><path d="M4 5h4l4 9 4-9h4l-6.5 14h-3L4 5z" fill="white"></path></svg></span>
+                    <span class="text-2xl font-extrabold tracking-tight">Velora</span>
+                </a>
+                <p class="text-sm text-mutedText leading-relaxed">Velora is a US fintech brand helping members earn fast, steady income through Commercial Consortia opportunities.</p>
+            </div>
+            <div>
+                <h4 class="mb-3 text-sm font-bold text-white uppercase tracking-wider">Platform</h4>
+                <ul class="space-y-2 text-sm text-mutedText">
+                    <li><a href="about.html" class="hover:text-white transition-colors">About Velora</a></li>
+                    <li><a href="top-earners.html" class="hover:text-white transition-colors">Top Earners</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="mb-3 text-sm font-bold text-white uppercase tracking-wider">Support</h4>
+                <ul class="space-y-2 text-sm text-mutedText">
+                    <li><a href="faq.html" class="hover:text-white transition-colors">FAQ</a></li>
+                    <li><a href="contact.html" class="hover:text-white transition-colors">Contact Us</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="mb-3 text-sm font-bold text-white uppercase tracking-wider">Legal</h4>
+                <ul class="space-y-2 text-sm text-mutedText">
+                    <li><a href="terms.html" class="hover:text-white transition-colors">Terms & Conditions</a></li>
+                    <li><a href="privacy.html" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-white/10 py-5 text-center text-xs text-mutedText">&copy; 2026 Velora. All rights reserved.</div>
+    </footer>
+
+    <!-- Interactive Event & Ticker Controller Logic Engine (client-only simulated registration) -->
+    <script>
+        // High-Conversion Pool array containing sample registration messages
+        const tickerPool = [
+            "Adamu just registered and activated Velora Gold Plan (₦14,500)",
+            "Chinedu just registered and activated Velora Platinum Plan (₦9,000)",
+            "Fatima just registered and activated Velora Gold Plan (₦14,500)",
+            "Blessing just registered and activated Velora Platinum Plan (₦9,000)"
+        ];
+
+        let tickerIndex = 0;
+        function runLiveTicker() {
+            const tickerContainer = document.getElementById("liveTicker");
+            const tickerText = document.getElementById("tickerText");
+            tickerText.innerText = tickerPool[tickerIndex];
+            tickerContainer.classList.remove("hidden");
+            tickerContainer.classList.add("ticker-slide");
+            tickerIndex = (tickerIndex + 1) % tickerPool.length;
+            setTimeout(() => {
+                tickerContainer.classList.add("hidden");
+                tickerContainer.classList.remove("ticker-slide");
+            }, 4300);
+        }
+        setInterval(runLiveTicker, 5000);
+        document.addEventListener("DOMContentLoaded", runLiveTicker);
+
+        // Client-only simulation of registration success (no server required)
+        function handleRegistration(e) {
+            e.preventDefault();
+            const form = document.getElementById('regForm');
+            const formData = new FormData(form);
+            const capturedName = formData.get('fullname') || 'Friend';
+
+            // Simulate server processing delay
+            document.body.style.cursor = 'wait';
+            setTimeout(() => {
+                document.body.style.cursor = 'auto';
+
+                // Show success modal and populate greeting
+                document.getElementById('modalUserGreeting').innerHTML = `Congratulations <strong class="text-accentGold font-bold">${capturedName}</strong> on creating your account successfully!`;
+                const modal = document.getElementById('successModal');
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+
+                // After a short delay redirect to static dashboard for testing
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 2500);
+            }, 900);
+        }
+    </script>
+</body>
+</html>
