@@ -1,0 +1,1919 @@
+<!DOCTYPE html>
+<html lang="en-NG">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#04100A">
+    <title>Dashboard — Nextel Nigeria | nextelconnect.ng</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/favicon-180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="images/favicon-192.png">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <style>
+        .page-content {
+            display: none;
+        }
+
+        .page-content.active {
+            display: block;
+        }
+
+        .mobile-header {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 900;
+            background: var(--bg-dark);
+            padding: 12px 16px;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-gold);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+        }
+
+        .mobile-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 800;
+            font-size: 20px;
+            letter-spacing: -0.5px;
+            color: var(--gold);
+        }
+
+        .mobile-logo-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: var(--gold-grad);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: var(--bg-dark);
+            font-weight: 900;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .hamburger-btn {
+            background: rgba(201, 168, 76, 0.1);
+            border: 1px solid rgba(201, 168, 76, 0.25);
+            border-radius: 10px;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 0;
+        }
+
+        .hamburger-btn:hover {
+            background: rgba(201, 168, 76, 0.18);
+        }
+
+        .hamburger-btn span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background: var(--gold);
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        .hamburger-btn.open span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .hamburger-btn.open span:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+
+        .hamburger-btn.open span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            z-index: 950;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        @media (max-width: 1024px) {
+            .mobile-header {
+                display: flex;
+            }
+            .dashboard-main {
+                padding-top: 70px;
+            }
+            body {
+                padding-bottom: 90px;
+            }
+            .sidebar {
+                position: fixed !important;
+                left: -300px !important;
+                top: 0 !important;
+                height: 100vh !important;
+                width: 260px !important;
+                z-index: 1000 !important;
+                transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                overflow-y: auto !important;
+            }
+            .sidebar.mobile-open {
+                left: 0 !important;
+            }
+        }
+
+        .bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 800;
+            background: var(--bg-dark);
+            border-top: 1px solid var(--border-gold);
+            padding: 0 8px 4px;
+            box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+        }
+
+        @media (max-width: 1024px) {
+            .bottom-nav {
+                display: flex;
+            }
+        }
+
+        .bottom-nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 10px 4px 6px;
+            color: rgba(255, 255, 255, 0.35);
+            text-decoration: none;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-radius: 14px;
+            margin: 6px 2px 0;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+        }
+
+        .bottom-nav-item svg {
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            stroke: currentColor;
+        }
+
+        .bottom-nav-item span {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .bottom-nav-item:hover {
+            color: rgba(201, 168, 76, 0.8);
+            background: rgba(201, 168, 76, 0.07);
+        }
+
+        .bottom-nav-item.active {
+            color: var(--gold);
+            background: rgba(201, 168, 76, 0.12);
+        }
+
+        .bottom-nav-item.active svg {
+            transform: scale(1.15) translateY(-1px);
+            filter: drop-shadow(0 0 6px rgba(201, 168, 76, 0.5));
+        }
+
+        .bottom-nav-item.active span {
+            font-weight: 700;
+        }
+
+        .bottom-nav-item.active::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            width: 4px;
+            height: 4px;
+            background: var(--gold);
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(201, 168, 76, 0.8);
+        }
+
+        .bottom-nav-item.nav-featured {
+            background: linear-gradient(135deg, rgba(201, 168, 76, 0.18), rgba(201, 168, 76, 0.06));
+            border: 1px solid rgba(201, 168, 76, 0.2);
+            margin-top: -8px;
+            padding-top: 14px;
+            border-radius: 20px 20px 14px 14px;
+        }
+
+        .bottom-nav-item.nav-featured.active {
+            background: linear-gradient(135deg, rgba(201, 168, 76, 0.28), rgba(201, 168, 76, 0.1));
+            border-color: rgba(201, 168, 76, 0.4);
+        }
+
+        #activity-feed-container {
+            position: fixed;
+            bottom: 100px;
+            left: 16px;
+            z-index: 700;
+            width: 320px;
+            max-width: calc(100vw - 32px);
+            pointer-events: none;
+        }
+
+        @media (max-width: 480px) {
+            #activity-feed-container {
+                bottom: 90px;
+                left: 12px;
+                width: calc(100vw - 24px);
+            }
+        }
+
+        .activity-toast {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, rgba(4, 16, 10, 0.97), rgba(7, 22, 9, 0.98));
+            border: 1px solid rgba(201, 168, 76, 0.2);
+            border-left: 3px solid var(--gold);
+            border-radius: 16px;
+            padding: 12px 14px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            pointer-events: all;
+            margin-bottom: 8px;
+            transform: translateX(-120%);
+            opacity: 0;
+            transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease;
+        }
+
+        .activity-toast.toast-show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .activity-toast.toast-hide {
+            transform: translateX(-120%);
+            opacity: 0;
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+        }
+
+        .toast-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 18px;
+            position: relative;
+        }
+
+        .toast-avatar.earning {
+            background: rgba(201, 168, 76, 0.15);
+            border: 1px solid rgba(201, 168, 76, 0.3);
+        }
+
+        .toast-avatar.withdrawal {
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .toast-avatar.signup {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .toast-avatar::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid #04100A;
+        }
+
+        .toast-avatar.earning::after {
+            background: var(--gold);
+        }
+
+        .toast-avatar.withdrawal::after {
+            background: #3B82F6;
+        }
+
+        .toast-avatar.signup::after {
+            background: #F59E0B;
+        }
+
+        .toast-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .toast-message {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.4;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .toast-message strong {
+            color: var(--gold);
+        }
+
+        .toast-meta {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 3px;
+        }
+
+        .toast-time {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.35);
+        }
+
+        .toast-location {
+            font-size: 11px;
+            color: rgba(201, 168, 76, 0.6);
+            font-weight: 500;
+        }
+
+        .toast-dot {
+            width: 3px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+        }
+
+        .toast-close {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            border: none;
+            color: rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            font-size: 12px;
+            line-height: 1;
+            transition: all 0.2s;
+            pointer-events: all;
+        }
+
+        .toast-close:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .locked-preview-section {
+            margin-top: 32px;
+        }
+
+        .locked-gig-preview {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .locked-gig-preview {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+        }
+
+        .preview-gig-card {
+            background: linear-gradient(135deg, rgba(12, 30, 16, 0.9), rgba(19, 36, 22, 0.95));
+            border: 1px solid rgba(201, 168, 76, 0.15);
+            border-radius: 20px;
+            padding: 24px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+
+        .preview-gig-card:hover {
+            border-color: rgba(201, 168, 76, 0.35);
+            transform: translateY(-3px);
+        }
+
+        .preview-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+            padding: 3px 9px;
+            border-radius: 20px;
+        }
+
+        .preview-gig-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 14px;
+            font-size: 1.5rem;
+        }
+
+        .preview-gig-icon.nexcall {
+            background: rgba(201, 168, 76, 0.12);
+            border: 1px solid rgba(201, 168, 76, 0.25);
+        }
+
+        .preview-gig-icon.nexdata {
+            background: rgba(59, 130, 246, 0.12);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+        }
+
+        .preview-gig-icon.nexsim {
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+        }
+
+        .preview-gig-card h3 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .preview-gig-earn {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+
+        .preview-gig-desc {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 14px;
+        }
+
+        .preview-unlock-btn {
+            width: 100%;
+            padding: 9px;
+            border-radius: 8px;
+            background: rgba(201, 168, 76, 0.1);
+            border: 1px solid rgba(201, 168, 76, 0.25);
+            color: var(--gold);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .preview-unlock-btn:hover {
+            background: rgba(201, 168, 76, 0.2);
+        }
+
+        .daily-calc-preview {
+            background: linear-gradient(135deg, rgba(12, 30, 16, 0.9), rgba(19, 36, 22, 0.95));
+            border: 1px solid rgba(201, 168, 76, 0.15);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 20px;
+        }
+
+        .daily-calc-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .breakdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-task {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .breakdown-amount {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .breakdown-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 14px 0 0;
+            margin-top: 10px;
+            border-top: 2px solid rgba(201, 168, 76, 0.2);
+        }
+
+        .breakdown-total span:first-child {
+            font-weight: 700;
+        }
+
+        .total-amount {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: var(--success);
+        }
+
+        .referral-preview-card {
+            background: linear-gradient(135deg, rgba(12, 30, 16, 0.9), rgba(19, 36, 22, 0.95));
+            border: 1px solid rgba(201, 168, 76, 0.15);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+
+        .referral-preview-card h3 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .referral-preview-card>p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .referral-tiers {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .tier-card {
+            flex: 1;
+            padding: 14px 12px;
+            border-radius: 12px;
+            background: rgba(201, 168, 76, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            text-align: center;
+        }
+
+        .tier-icon {
+            font-size: 22px;
+            margin-bottom: 6px;
+        }
+
+        .tier-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .tier-amount {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--gold);
+        }
+
+        .referral-preview-stats {
+            display: flex;
+            gap: 12px;
+        }
+
+        .ref-stat {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            background: rgba(201, 168, 76, 0.05);
+            border: 1px solid rgba(201, 168, 76, 0.1);
+            text-align: center;
+        }
+
+        .ref-num {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--gold);
+            display: block;
+        }
+
+        .ref-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .section-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0;
+        }
+
+        .app-download-banner {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            z-index: 600;
+            background: linear-gradient(135deg, rgba(4, 16, 10, 0.98), rgba(7, 22, 9, 0.99));
+            border: 1px solid rgba(201, 168, 76, 0.25);
+            border-radius: 16px;
+            padding: 14px 16px;
+            max-width: 400px;
+            width: calc(100% - 32px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .app-download-banner.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .app-banner-close {
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            color: rgba(255, 255, 255, 0.5);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .app-banner-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .app-banner-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--gold-grad);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .app-banner-text {
+            flex: 1;
+        }
+
+        .app-banner-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .app-banner-subtitle {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .app-banner-download {
+            background: var(--gold-grad);
+            border: none;
+            color: var(--bg-dark);
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .go-back-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .go-back-modal-overlay.active {
+            display: flex;
+        }
+
+        .go-back-modal {
+            background: var(--surface);
+            border: 1px solid rgba(201, 168, 76, 0.25);
+            border-radius: 20px;
+            padding: 36px;
+            max-width: 440px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .go-back-modal-icon {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+
+        .go-back-modal-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .go-back-modal-body {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 8px;
+        }
+
+        .go-back-modal-note {
+            font-size: 0.82rem;
+            color: #f59e0b;
+            background: rgba(245, 158, 11, 0.08);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .go-back-modal-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .go-back-modal-btn-confirm {
+            padding: 13px;
+            border-radius: 10px;
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .go-back-modal-btn-confirm:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .go-back-modal-btn-cancel {
+            padding: 13px;
+            border-radius: 10px;
+            background: rgba(201, 168, 76, 0.1);
+            border: 1px solid rgba(201, 168, 76, 0.25);
+            color: var(--gold);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .go-back-modal-btn-cancel:hover {
+            background: rgba(201, 168, 76, 0.18);
+        }
+
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 4000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-spinner-custom {
+            width: 56px;
+            height: 56px;
+            border: 3px solid rgba(201, 168, 76, 0.2);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-text-custom {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .loading-subtext-custom {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .modal-content {
+                border-radius: 20px 20px 0 0 !important;
+                max-height: 92vh;
+                overflow-y: auto;
+            }
+            .modal {
+                align-items: flex-end !important;
+            }
+            .payment-modal-content {
+                border-radius: 20px 20px 0 0 !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .referral-tiers {
+                flex-direction: column;
+            }
+            .referral-preview-stats {
+                flex-direction: column;
+            }
+            .locked-gig-preview {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="activity-feed-container"></div>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+    <!-- Mobile Header -->
+    <div class="mobile-header" id="mobileHeader">
+        <div class="mobile-logo">
+            <div class="mobile-logo-icon">N</div>
+            Nextel
+        </div>
+        <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleSidebar()" aria-label="Toggle navigation">
+    <span></span><span></span><span></span>
+  </button>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="index.html" class="logo" style="text-decoration:none;">
+                <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#E8C96A,#C9A84C);display:flex;align-items:center;justify-content:center;font-size:14px;color:#04100A;font-weight:900;flex-shrink:0;font-family:'Plus Jakarta Sans',sans-serif;">N</div>
+                <span>Nextel</span>
+            </a>
+        </div>
+        <nav class="sidebar-nav">
+            <button class="nav-item active" data-page="home" onclick="switchPage('home')">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 7L10 2L17 7V17C17 17.5 16.8 18 16.4 18.4C16 18.8 15.5 19 15 19H5C4.5 19 4 18.8 3.6 18.4C3.2 18 3 17.5 3 17V7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Dashboard</span>
+    </button>
+            <button class="nav-item" data-page="gigs" onclick="switchPage('gigs')">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 9L11 11L8 13V9Z" fill="currentColor"/></svg>
+      <span>NetGain Streams</span>
+    </button>
+            <button class="nav-item" data-page="earnings" onclick="switchPage('earnings')">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><polyline points="2 14 6 10 9 13 13 7 18 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Earnings</span>
+    </button>
+            <button class="nav-item" data-page="wallet" onclick="switchPage('wallet')">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="4" width="16" height="12" rx="2" stroke="currentColor" stroke-width="2"/><circle cx="14" cy="10" r="1.5" fill="currentColor"/></svg>
+      <span>Wallet</span>
+    </button>
+            <button class="nav-item" data-page="support" onclick="switchPage('support')">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="2"/><path d="M10 14V10M10 6H10.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span>Support</span>
+    </button>
+            <button class="nav-item" data-page="profile" onclick="switchPage('profile')">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="4" stroke="currentColor" stroke-width="2"/><path d="M3 18C3 14.7 5.7 12 9 12H11C14.3 12 17 14.7 17 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span>Profile</span>
+    </button>
+        </nav>
+        <div class="sidebar-footer">
+            <button class="logout-btn" onclick="logout()">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7 17H4C3.5 17 3 16.8 2.6 16.4C2.2 16 2 15.5 2 15V5C2 4.5 2.2 4 2.6 3.6C3 3.2 3.5 3 4 3H7M13 13L17 9M17 9L13 5M17 9H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Logout</span>
+    </button>
+        </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="dashboard-main">
+        <div class="dashboard-container">
+
+            <!-- ══ HOME PAGE ══ -->
+            <div id="homePage" class="page-content active">
+                <div id="statusBanner"></div>
+
+                <!-- LOCKED STATE -->
+                <div id="lockedState" class="status-state" style="display:none;">
+                    <div class="lock-card">
+                        <div class="lock-icon">
+                            <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+              <rect x="12" y="28" width="40" height="28" rx="4" stroke="#ef4444" stroke-width="3"/>
+              <path d="M20 28V20C20 13.4 25.4 8 32 8C38.6 8 44 13.4 44 20V28" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="32" cy="42" r="4" fill="#ef4444"/>
+            </svg>
+                        </div>
+                        <h2 class="lock-title">Your Account Is Locked</h2>
+                        <p class="lock-subtitle">Complete your NTU Registration to unlock all 6 NetGain streams and start earning ₦395.5/subscriber/month.</p>
+
+                        <div id="lockedPackageInfo" style="margin:20px 0 8px;">
+                            <div id="lockedPackageName" style="font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;font-weight:700;color:rgba(255,255,255,0.9);margin-bottom:4px;">✦ Premium NTU Registration</div>
+                            <div class="lock-amount" id="lockedPackageAmount">₦17,500 <span>One-time Registration Fee</span></div>
+                            <div id="lockedReferralCaption" style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(255,255,255,0.35);margin-top:8px;">₦15,000 Network Referral Bonus credited on activation</div>
+                        </div>
+
+                        <button class="btn-primary btn-lg" id="lockedPayBtn" onclick="openPaymentModal()">
+            Pay ₦17,500 Now — Unlock NetGain Streams
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7 3L14 10L7 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+
+                        <div class="lock-features">
+                            <div class="lock-feature">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="var(--gold)" stroke-width="2"/><path d="M6 10L9 13L14 8" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"/></svg>
+                                <span>₦15,000 Network Referral Bonus — credited on activation</span>
+                            </div>
+                            <div class="lock-feature">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="var(--gold)" stroke-width="2"/><path d="M6 10L9 13L14 8" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"/></svg>
+                                <span>₦10,000 Network Milestone Reward on your first activation</span>
+                            </div>
+                            <div class="lock-feature">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="var(--gold)" stroke-width="2"/><path d="M6 10L9 13L14 8" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"/></svg>
+                                <span>All 6 NetGain streams unlocked immediately</span>
+                            </div>
+                            <div class="lock-feature">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="var(--gold)" stroke-width="2"/><path d="M6 10L9 13L14 8" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"/></svg>
+                                <span>₦395.5/subscriber/month base earning from day one</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Locked Preview Section -->
+                    <div class="locked-preview-section">
+                        <h2 class="section-title" style="text-align:center;margin-bottom:24px;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:inline-block;vertical-align:-3px;margin-right:6px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>                            Unlock These NetGain Streams After Registration
+                        </h2>
+
+                        <div class="locked-gig-preview">
+                            <div class="preview-gig-card">
+                                <div class="preview-badge">Locked</div>
+                                <div class="preview-gig-icon nexcall"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.26h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8a16 16 0 0 0 6 6l.76-.76a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 15.42z"/></svg></div>
+                                <h3>NexCall</h3>
+                                <div class="preview-gig-earn">₦50 / min</div>
+                                <p class="preview-gig-desc">Earn on every subscriber call minute routed through Nextel</p>
+                                <button class="preview-unlock-btn" onclick="openPaymentModal()">Unlock Now</button>
+                            </div>
+                            <div class="preview-gig-card">
+                                <div class="preview-badge">Locked</div>
+                                <div class="preview-gig-icon nexdata"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+                                <h3>NexData</h3>
+                                <div class="preview-gig-earn">Per Bundle</div>
+                                <p class="preview-gig-desc">Commission on every data bundle purchased by your subscribers</p>
+                                <button class="preview-unlock-btn" onclick="openPaymentModal()">Unlock Now</button>
+                            </div>
+                            <div class="preview-gig-card">
+                                <div class="preview-badge">Locked</div>
+                                <div class="preview-gig-icon nexsim"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M15 2v6H9M9 22v-6h6"/></svg></div>
+                                <h3>NexSim</h3>
+                                <div class="preview-gig-earn">₦12,000 / SIM</div>
+                                <p class="preview-gig-desc">Earn ₦12,000 for every Nextel SIM card activated</p>
+                                <button class="preview-unlock-btn" onclick="openPaymentModal()">Unlock Now</button>
+                            </div>
+                        </div>
+
+                        <!-- Daily earning calculator preview -->
+                        <div class="daily-calc-preview">
+                            <h3 class="daily-calc-title">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:inline-block;vertical-align:-3px;margin-right:6px;"><circle cx="12" cy="12" r="10"/><path d="M14.31 8a4 4 0 0 0-4.62 0 2.5 2.5 0 0 0 0 4 4 4 0 0 1 0 4 4 4 0 0 1-4.62 0"/><line x1="12" y1="6" x2="12" y2="18"/></svg>                                Your Monthly NetGain Potential (50 Subscribers)
+                            </h3>
+                            <div class="breakdown-item"><span class="breakdown-task">NexCall — 1,000 mins × ₦50</span><span class="breakdown-amount">₦50,000</span></div>
+                            <div class="breakdown-item"><span class="breakdown-task">NexData — 50 subs base rate</span><span class="breakdown-amount">₦19,775</span></div>
+                            <div class="breakdown-item"><span class="breakdown-task">NexVoice — voice plan commissions</span><span class="breakdown-amount">₦5,000</span></div>
+                            <div class="breakdown-item"><span class="breakdown-task">NexSim — 2 SIM activations</span><span class="breakdown-amount">₦24,000</span></div>
+                            <div class="breakdown-item"><span class="breakdown-task">NexPay — bill payment commissions</span><span class="breakdown-amount">₦3,000</span></div>
+                            <div class="breakdown-item"><span class="breakdown-task">NexGrow — milestone bonus</span><span class="breakdown-amount">₦10,000</span></div>
+                            <div class="breakdown-total">
+                                <span>Monthly NetGain Potential</span>
+                                <span class="total-amount">₦111,775+</span>
+                            </div>
+                            <button class="btn-primary btn-lg" onclick="openPaymentModal()" id="previewPayBtn" style="width:100%;margin-top:20px;border-radius:14px;">
+              Start Earning Today — Pay ₦17,500
+            </button>
+                        </div>
+
+                        <!-- Referral preview -->
+                        <div class="referral-preview-card">
+                            <h3>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:inline-block;vertical-align:-3px;margin-right:6px;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>                                Network Referral Programme
+                            </h3>
+                            <p>Earn passive income by recruiting subscribers to Nextel Nigeria</p>
+                            <div class="referral-tiers">
+                                <div class="tier-card">
+                                    <div class="tier-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="15" r="7"/><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"/><polyline points="15 7 17 2 7 2 9 7"/></svg></div>
+                                    <span class="tier-label">1st Indirect Commission</span>
+                                    <span class="tier-amount">₦400</span>
+                                </div>
+                                <div class="tier-card">
+                                    <div class="tier-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="15" r="7"/><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"/><polyline points="15 7 17 2 7 2 9 7"/></svg></div>
+                                    <span class="tier-label">2nd Indirect Commission</span>
+                                    <span class="tier-amount">₦100</span>
+                                </div>
+                                <div class="tier-card">
+                                    <div class="tier-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg></div>
+                                    <span class="tier-label">Milestone Reward</span>
+                                    <span class="tier-amount">₦10,000</span>
+                                </div>
+                            </div>
+                            <div class="referral-preview-stats">
+                                <div class="ref-stat"><span class="ref-num">₦15K</span><span class="ref-label">Per Subscriber Recruited</span></div>
+                                <div class="ref-stat"><span class="ref-num">₦395.5</span><span class="ref-label">Per Subscriber/Month</span></div>
+                                <div class="ref-stat"><span class="ref-num">24hr</span><span class="ref-label">Fast Withdrawals</span></div>
+                            </div>
+                            <button class="btn-primary" onclick="openPaymentModal()" style="width:100%;margin-top:16px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:inline-block;vertical-align:-2px;margin-right:6px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+              Unlock Referral Programme
+            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AWAITING VERIFICATION STATE -->
+                <div id="verificationState" class="status-state" style="display:none;">
+                    <div class="verification-card">
+                        <div class="verification-icon">
+                            <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+              <circle cx="32" cy="32" r="28" stroke="#F59E0B" stroke-width="3"/>
+              <path d="M32 20V32L38 38" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+                        </div>
+                        <h2 class="verification-title">Payment Received. Awaiting Verification.</h2>
+                        <p class="verification-subtitle">Our Nextel team is reviewing your NTU Registration Fee payment. This usually takes 1–24 hours while we verify your account.</p>
+
+                        <div class="verification-steps">
+                            <div class="verification-step completed">
+                                <div class="step-icon">✓</div>
+                                <div class="step-content">
+                                    <div class="step-title">Registration Complete</div>
+                                    <div class="step-time">Completed</div>
+                                </div>
+                            </div>
+                            <div class="verification-step completed">
+                                <div class="step-icon">✓</div>
+                                <div class="step-content">
+                                    <div class="step-title">NTU Registration Fee Received</div>
+                                    <div class="step-time" id="verifyAmountConfirmed">Payment confirmed</div>
+                                </div>
+                            </div>
+                            <div class="verification-step active">
+                                <div class="step-icon">
+                                    <div class="spinner"></div>
+                                </div>
+                                <div class="step-content">
+                                    <div class="step-title">Manual Verification</div>
+                                    <div class="step-time">In progress — verification underway</div>
+                                </div>
+                            </div>
+                            <div class="verification-step">
+                                <div class="step-icon">4</div>
+                                <div class="step-content">
+                                    <div class="step-title">Account Activation</div>
+                                    <div class="step-time">All 6 NetGain streams unlock</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="verification-contact-section">
+                            <div class="contact-prompt">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#F59E0B" stroke-width="2"/><path d="M12 8V12M12 16H12.01" stroke="#F59E0B" stroke-width="2" stroke-linecap="round"/></svg>
+                                <div>
+                                    <strong>Verification in progress</strong>
+                                    <p>We are now reviewing your transfer. No further action is needed.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="verification-go-back-section">
+                            <p class="go-back-hint">Haven't made payment yet, or accidentally bypassed the payment step?</p>
+                            <button class="btn-go-back" onclick="showGoBackModal()">← Go Back &amp; Restart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VERIFIED STATE -->
+                <div id="verifiedState" class="status-state" style="display:none;">
+                    <div class="welcome-section">
+                        <div class="welcome-content">
+                            <h1 class="dashboard-title">Welcome back, <span id="userName">Distributor</span> ✦</h1>
+                            <p class="dashboard-subtitle">Here's your NetGain streams summary for today</p>
+                        </div>
+                        <div class="dashboard-date">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="4" width="14" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 2V6M13 2V6M3 8H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                            <span id="currentDate"></span>
+                        </div>
+                    </div>
+
+                    <div class="summary-grid">
+                        <div class="summary-card">
+                            <div class="summary-header">
+                                <span class="summary-label">Total NetGains</span>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L15 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="var(--gold)"/></svg>
+                            </div>
+                            <div class="summary-value" id="totalEarnings">₦0</div>
+                            <div class="summary-change positive"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Growing daily</span></div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="summary-header">
+                                <span class="summary-label">Today's Earnings</span>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="var(--gold)" stroke-width="2"/><path d="M12 6V12L16 14" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"/></svg>
+                            </div>
+                            <div class="summary-value" id="todayEarnings">₦0</div>
+                            <div class="summary-change neutral"><span>Keep growing</span></div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="summary-header">
+                                <span class="summary-label">Wallet Balance</span>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="13" rx="2" stroke="var(--gold)" stroke-width="2"/><circle cx="16" cy="12" r="2" fill="var(--gold)"/></svg>
+                            </div>
+                            <div class="summary-value" id="walletBalance">₦0</div>
+                            <div class="summary-action"><a href="#" onclick="switchPage('wallet')" class="summary-link">Withdraw →</a></div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="summary-header">
+                                <span class="summary-label">Referral Earnings</span>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M17 21V19C17 17 15.2 15 13 15H5C2.8 15 1 17 1 19V21M23 21V19C23 17.2 21.9 15.6 20.3 15.2M16 3.1C17.6 3.6 18.8 5.1 18.8 6.8S17.6 10 16 10.5M13 7C13 9.2 11.2 11 9 11S5 9.2 5 7 6.8 3 9 3s4 1.8 4 4Z" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"/></svg>
+                            </div>
+                            <div class="summary-value" id="referralEarnings">₦0</div>
+                            <div class="summary-action"><a href="#" class="summary-link">View referrals →</a></div>
+                        </div>
+                    </div>
+
+                    <div class="section-header">
+                        <h2 class="section-title">Active NetGain Streams</h2>
+                        <a href="#" onclick="switchPage('gigs')" class="section-link">View all →</a>
+                    </div>
+
+                    <div class="collabs-grid">
+                        <div class="collab-card" onclick="checkFeatureAccess('NexCall')">
+                            <div class="collab-icon nexcall"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.26h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8a16 16 0 0 0 6 6l.76-.76a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 15.42z"/></svg></div>
+                            <div class="collab-content">
+                                <h3 class="collab-title">NexCall</h3>
+                                <p class="collab-description">Subscriber call minutes</p>
+                                <div class="collab-footer"><span class="collab-earning">₦50/min</span><span class="collab-limit">Active</span></div>
+                            </div>
+                        </div>
+                        <div class="collab-card" onclick="checkFeatureAccess('NexData')">
+                            <div class="collab-icon nexdata"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+                            <div class="collab-content">
+                                <h3 class="collab-title">NexData</h3>
+                                <p class="collab-description">Data bundle commissions</p>
+                                <div class="collab-footer"><span class="collab-earning">Per Bundle</span><span class="collab-limit">Active</span></div>
+                            </div>
+                        </div>
+                        <div class="collab-card featured" onclick="checkFeatureAccess('NexSim')">
+                            <div class="featured-badge">Top Earner</div>
+                            <div class="collab-icon nexsim"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M15 2v6H9M9 22v-6h6"/></svg></div>
+                            <div class="collab-content">
+                                <h3 class="collab-title">NexSim</h3>
+                                <p class="collab-description">SIM card activations</p>
+                                <div class="collab-footer"><span class="collab-earning">₦12,000/SIM</span><span class="collab-limit">Unlimited</span></div>
+                            </div>
+                        </div>
+                        <div class="collab-card" onclick="checkFeatureAccess('NexPay')">
+                            <div class="collab-icon nexpay"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
+                            <div class="collab-content">
+                                <h3 class="collab-title">NexPay</h3>
+                                <p class="collab-description">Bill payment commissions</p>
+                                <div class="collab-footer"><span class="collab-earning">Per Payment</span><span class="collab-limit">Active</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-header">
+                        <h2 class="section-title">Recent Activity</h2>
+                        <a href="#" onclick="switchPage('earnings')" class="section-link">View all →</a>
+                    </div>
+                    <div class="activity-card">
+                        <div class="activity-empty">
+                            <svg width="64" height="64" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="28" stroke="var(--gold)" stroke-width="2" opacity="0.3"/><path d="M32 20V32M32 44H32.02" stroke="var(--gold)" stroke-width="3" stroke-linecap="round"/></svg>
+                            <p>No activity yet. Grow your subscriber base to see your NetGain earnings here.</p>
+                            <button onclick="switchPage('gigs')" class="btn-secondary">Browse Streams</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Support Section -->
+                <div class="support-section" id="supportSection">
+                    <div class="support-card">
+                        <div class="support-header">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M16 28C22.6 28 28 22.6 28 16S22.6 4 16 4 4 9.4 4 16C4 18.5 4.8 20.8 6.1 22.7L4 28L9.3 25.9C11.2 27.2 13.5 28 16 28Z" stroke="var(--gold)" stroke-width="2"/><circle cx="12" cy="16" r="1.5" fill="var(--gold)"/><circle cx="16" cy="16" r="1.5" fill="var(--gold)"/><circle cx="20" cy="16" r="1.5" fill="var(--gold)"/></svg>
+                            <div>
+                                <h3 class="support-title">Need Help?</h3>
+                                <p class="support-subtitle">Nextel support is available 24/7 on Telegram</p>
+                            </div>
+                        </div>
+                        <div class="support-buttons">
+                            <a href="https://t.me" target="_blank" rel="noopener noreferrer" class="support-btn telegram">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-2.04 9.613c-.148.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.48 14.697l-2.95-.924c-.642-.2-.655-.642.136-.95l11.532-4.448c.535-.194 1.003.13.364.873z"/></svg>
+              Telegram Support
+            </a>
+                            <a href="mailto:info@nextelconnect.ng" class="support-btn email">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="4" width="16" height="12" rx="2" stroke="currentColor" stroke-width="2"/><path d="M2 6L10 11L18 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              Email Support
+            </a>
+                            <a href="faq.html" class="support-btn help">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/><path d="M10 14V10M10 6H10.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              Help &amp; FAQ
+            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ══ NETGAIN STREAMS PAGE ══ -->
+            <div id="gigsPage" class="page-content">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">NetGain Streams</h1>
+                        <p class="page-subtitle">6 income streams · ₦395.5/subscriber/month base rate</p>
+                    </div>
+                    <div class="page-stats">
+                        <div class="stat-badge">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="var(--gold)" stroke-width="2"/><path d="M10 6V10L13 13" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"/></svg>
+                            <span>Base: <strong>₦395.5/sub/month</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="collabs-detailed-grid" id="gigsGrid">
+                    <div class="collab-detailed-card">
+                        <div class="collab-card-header">
+                            <div class="collab-icon-large nexcall"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.26h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8a16 16 0 0 0 6 6l.76-.76a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 15.42z"/></svg></div>
+                            <div
+                                class="collab-badge available">Active</div>
+                    </div>
+                    <div class="collab-card-body">
+                        <h3 class="collab-card-title">NexCall</h3>
+                        <p class="collab-card-description">Earn ₦50 for every minute of calls made by your subscribers through the Nextel network. More call time = more earnings.</p>
+                        <div class="collab-stats-row">
+                            <div class="collab-stat"><span class="stat-label">Earning</span><span class="stat-value">₦50/min</span></div>
+                            <div class="collab-stat"><span class="stat-label">Type</span><span class="stat-value">Per Minute</span></div>
+                            <div class="collab-stat"><span class="stat-label">Limit</span><span class="stat-value">Unlimited</span></div>
+                        </div>
+                    </div>
+                    <div class="collab-card-footer"><button class="btn-primary btn-full" onclick="checkFeatureAccess('NexCall')">View Stream</button></div>
+                </div>
+
+                <div class="collab-detailed-card">
+                    <div class="collab-card-header">
+                        <div class="collab-icon-large nexdata"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+                        <div class="collab-badge available">Active</div>
+                    </div>
+                    <div class="collab-card-body">
+                        <h3 class="collab-card-title">NexData</h3>
+                        <p class="collab-card-description">Earn a commission every time one of your subscribers purchases a data bundle. The more active your base, the more you earn.</p>
+                        <div class="collab-stats-row">
+                            <div class="collab-stat"><span class="stat-label">Earning</span><span class="stat-value">Per Bundle</span></div>
+                            <div class="collab-stat"><span class="stat-label">Type</span><span class="stat-value">Per Purchase</span></div>
+                            <div class="collab-stat"><span class="stat-label">Limit</span><span class="stat-value">Unlimited</span></div>
+                        </div>
+                    </div>
+                    <div class="collab-card-footer"><button class="btn-primary btn-full" onclick="checkFeatureAccess('NexData')">View Stream</button></div>
+                </div>
+
+                <div class="collab-detailed-card featured">
+                    <div class="featured-ribbon">Top Earner</div>
+                    <div class="collab-card-header">
+                        <div class="collab-icon-large nexvoice"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></div>
+                        <div
+                            class="collab-badge live">Per Plan</div>
+                </div>
+                <div class="collab-card-body">
+                    <h3 class="collab-card-title">NexVoice</h3>
+                    <p class="collab-card-description">Commission earned each time a subscriber subscribes to a Nextel voice plan. Recurring monthly income per active subscriber.</p>
+                    <div class="collab-stats-row">
+                        <div class="collab-stat"><span class="stat-label">Earning</span><span class="stat-value">Per Plan</span></div>
+                        <div class="collab-stat"><span class="stat-label">Type</span><span class="stat-value">Recurring</span></div>
+                        <div class="collab-stat"><span class="stat-label">Limit</span><span class="stat-value">Unlimited</span></div>
+                    </div>
+                </div>
+                <div class="collab-card-footer"><button class="btn-primary btn-full" onclick="checkFeatureAccess('NexVoice')">View Stream</button></div>
+            </div>
+
+            <div class="collab-detailed-card featured">
+                <div class="featured-ribbon">₦12K/SIM</div>
+                <div class="collab-card-header">
+                    <div class="collab-icon-large nexsim"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M15 2v6H9M9 22v-6h6"/></svg></div>
+                    <div class="collab-badge live">Per Activation</div>
+                </div>
+                <div class="collab-card-body">
+                    <h3 class="collab-card-title">NexSim</h3>
+                    <p class="collab-card-description">Earn ₦12,000 for every Nextel SIM card you activate. This is the single highest-paying individual stream in the programme.</p>
+                    <div class="collab-stats-row">
+                        <div class="collab-stat"><span class="stat-label">Earning</span><span class="stat-value">₦12,000</span></div>
+                        <div class="collab-stat"><span class="stat-label">Type</span><span class="stat-value">Per SIM</span></div>
+                        <div class="collab-stat"><span class="stat-label">Limit</span><span class="stat-value">Unlimited</span></div>
+                    </div>
+                </div>
+                <div class="collab-card-footer"><button class="btn-primary btn-full" onclick="checkFeatureAccess('NexSim')">View Stream</button></div>
+            </div>
+
+            <div class="collab-detailed-card">
+                <div class="collab-card-header">
+                    <div class="collab-icon-large nexpay"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
+                    <div
+                        class="collab-badge available">Active</div>
+            </div>
+            <div class="collab-card-body">
+                <h3 class="collab-card-title">NexPay</h3>
+                <p class="collab-card-description">Earn a commission every time a subscriber pays bills (electricity, cable, airtime) through the Nextel NexPay platform.</p>
+                <div class="collab-stats-row">
+                    <div class="collab-stat"><span class="stat-label">Earning</span><span class="stat-value">Per Payment</span></div>
+                    <div class="collab-stat"><span class="stat-label">Type</span><span class="stat-value">Per Transaction</span></div>
+                    <div class="collab-stat"><span class="stat-label">Limit</span><span class="stat-value">Unlimited</span></div>
+                </div>
+            </div>
+            <div class="collab-card-footer"><button class="btn-primary btn-full" onclick="checkFeatureAccess('NexPay')">View Stream</button></div>
+        </div>
+
+        <div class="collab-detailed-card">
+            <div class="collab-card-header">
+                <div class="collab-icon-large nexgrow"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+                <div class="collab-badge available">Active</div>
+            </div>
+            <div class="collab-card-body">
+                <h3 class="collab-card-title">NexGrow</h3>
+                <p class="collab-card-description">Milestone and growth performance bonuses awarded as your subscriber base expands. ₦10,000 Network Milestone Reward included.</p>
+                <div class="collab-stats-row">
+                    <div class="collab-stat"><span class="stat-label">Milestone</span><span class="stat-value">₦10,000</span></div>
+                    <div class="collab-stat"><span class="stat-label">Type</span><span class="stat-value">Milestone</span></div>
+                    <div class="collab-stat"><span class="stat-label">Limit</span><span class="stat-value">Multi-tier</span></div>
+                </div>
+            </div>
+            <div class="collab-card-footer"><button class="btn-primary btn-full" onclick="checkFeatureAccess('NexGrow')">View Stream</button></div>
+        </div>
+        </div>
+        </div>
+
+        <!-- ══ EARNINGS PAGE ══ -->
+        <div id="earningsPage" class="page-content">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">My NetGains</h1>
+                    <p class="page-subtitle">Track your Naira earnings and performance</p>
+                </div>
+                <div class="period-selector">
+                    <button class="period-btn active" onclick="changePeriod('today', event)">Today</button>
+                    <button class="period-btn" onclick="changePeriod('week', event)">Week</button>
+                    <button class="period-btn" onclick="changePeriod('month', event)">Month</button>
+                    <button class="period-btn" onclick="changePeriod('all', event)">All Time</button>
+                </div>
+            </div>
+            <div class="earnings-summary-grid">
+                <div class="earnings-summary-card primary">
+                    <div class="summary-content"><span class="summary-label">Total NetGains</span>
+                        <h2 class="summary-amount" id="totalEarningsPage">₦0</h2>
+                    </div>
+                </div>
+                <div class="earnings-summary-card">
+                    <div class="summary-content"><span class="summary-label">This Period</span>
+                        <h2 class="summary-amount" id="periodEarningsPage">₦0</h2>
+                        <div class="summary-detail">From <span id="taskCountPage">0</span> active subscribers</div>
+                    </div>
+                </div>
+                <div class="earnings-summary-card">
+                    <div class="summary-content"><span class="summary-label">Referral Commissions</span>
+                        <h2 class="summary-amount" id="avgPerTaskPage">₦0</h2>
+                        <div class="summary-detail">₦400 per direct referral</div>
+                    </div>
+                </div>
+                <div class="earnings-summary-card">
+                    <div class="summary-content"><span class="summary-label">Milestone Reward</span>
+                        <h2 class="summary-amount" id="pendingAmountPage">₦10,000</h2>
+                        <div class="summary-detail">Credited on activation</div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity-card">
+                <div class="activity-empty">
+                    <svg width="64" height="64" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="28" stroke="var(--gold)" stroke-width="2" opacity="0.3"/><path d="M32 20V32M32 44H32.02" stroke="var(--gold)" stroke-width="3" stroke-linecap="round"/></svg>
+                    <p>No earning history yet. Grow your subscriber base to see your NetGain earnings here.</p>
+                    <button onclick="switchPage('gigs')" class="btn-secondary">Go to NetGain Streams</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══ WALLET PAGE ══ -->
+        <div id="walletPage" class="page-content">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">My Wallet</h1>
+                    <p class="page-subtitle">Manage your Naira earnings and withdrawals</p>
+                </div>
+            </div>
+            <div class="wallet-cards">
+                <div class="wallet-balance-card">
+                    <div class="wallet-balance-header">
+                        <span class="wallet-balance-label">Available Balance</span>
+                        <button class="btn-icon" onclick="openWithdrawModal()">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2V14M10 14L6 10M10 14L14 10M3 18H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+                    </div>
+                    <div class="wallet-balance-amount" id="walletBalancePage">₦0</div>
+                    <div class="wallet-balance-sub">Naira balance ready for withdrawal</div>
+                    <div class="wallet-actions">
+                        <button class="btn-primary" onclick="openWithdrawModal()">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2V14M10 14L6 10M10 14L14 10M3 18H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Withdraw Funds
+            </button>
+                        <button class="btn-secondary" onclick="openAddBankModal()">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="4" width="16" height="12" rx="2" stroke="currentColor" stroke-width="2"/><path d="M2 8H18" stroke="currentColor" stroke-width="2"/></svg>
+              Add Bank Account
+            </button>
+                    </div>
+                </div>
+                <div class="wallet-stats-grid">
+                    <div class="wallet-stat-card">
+                        <div class="wallet-stat-icon">₦</div>
+                        <div class="wallet-stat-content"><span class="wallet-stat-label">Approved for Withdrawal</span><span class="wallet-stat-value" id="approvedBalancePage">₦0</span></div>
+                    </div>
+                    <div class="wallet-stat-card">
+                        <div class="wallet-stat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+                        <div class="wallet-stat-content"><span class="wallet-stat-label">Pending Verification</span><span class="wallet-stat-value" id="pendingBalancePage">₦0</span></div>
+                    </div>
+                    <div class="wallet-stat-card">
+                        <div class="wallet-stat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg></div>
+                        <div
+                            class="wallet-stat-content"><span class="wallet-stat-label">Total Withdrawn</span><span class="wallet-stat-value">₦0</span></div>
+                </div>
+                <div class="wallet-stat-card">
+                    <div class="wallet-stat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg></div>
+                    <div
+                        class="wallet-stat-content"><span class="wallet-stat-label">Network Milestone Reward</span><span class="wallet-stat-value" style="color:var(--success);">₦10,000</span></div>
+            </div>
+        </div>
+        </div>
+        <div class="section-header" style="margin-top:28px;">
+            <h2 class="section-title">Transaction History</h2>
+        </div>
+        <div class="activity-card">
+            <div class="activity-empty">
+                <svg width="64" height="64" viewBox="0 0 64 64" fill="none"><rect x="8" y="12" width="48" height="40" rx="4" stroke="var(--gold)" stroke-width="2" opacity="0.3"/><path d="M20 28H44M20 36H36" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" opacity="0.5"/></svg>
+                <p>No transactions yet. Withdraw your first NetGains to see history here.</p>
+                <button onclick="openAddBankModal()" class="btn-secondary">Add Bank Account</button>
+            </div>
+        </div>
+        </div>
+
+        <!-- ══ SUPPORT PAGE ══ -->
+        <div id="supportPage" class="page-content">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Help &amp; Support</h1>
+                    <p class="page-subtitle">We're available 24/7 to help you</p>
+                </div>
+            </div>
+            <div class="support-card" style="margin-bottom:24px;">
+                <div class="support-header">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M16 28C22.6 28 28 22.6 28 16S22.6 4 16 4 4 9.4 4 16C4 18.5 4.8 20.8 6.1 22.7L4 28L9.3 25.9C11.2 27.2 13.5 28 16 28Z" stroke="var(--gold)" stroke-width="2"/><circle cx="12" cy="16" r="1.5" fill="var(--gold)"/><circle cx="16" cy="16" r="1.5" fill="var(--gold)"/><circle cx="20" cy="16" r="1.5" fill="var(--gold)"/></svg>
+                    <div>
+                        <h3 class="support-title">Contact Nextel Support</h3>
+                        <p class="support-subtitle">Fastest response on Telegram — typically under 1 hour</p>
+                    </div>
+                </div>
+                <div class="support-buttons">
+                    <a href="https://t.me" target="_blank" rel="noopener noreferrer" class="support-btn telegram">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-2.04 9.613c-.148.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.48 14.697l-2.95-.924c-.642-.2-.655-.642.136-.95l11.532-4.448c.535-.194 1.003.13.364.873z"/></svg>
+            Telegram Support
+          </a>
+                    <a href="mailto:info@nextelconnect.ng" class="support-btn email">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="4" width="16" height="12" rx="2" stroke="currentColor" stroke-width="2"/><path d="M2 6L10 11L18 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            Email Support
+          </a>
+                    <a href="faq.html" class="support-btn help">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/><path d="M10 14V10M10 6H10.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            Help &amp; FAQ
+          </a>
+                    <a href="index.html#earning-structure" class="support-btn help">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M2 14L6 10L9 13L13 7L18 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            Earning Structure
+          </a>
+                </div>
+            </div>
+
+            <div class="section-header">
+                <h2 class="section-title">Quick Answers</h2>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question"><span>How much does Nextel pay per subscriber?</span><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 8L10 13L15 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+                    <div class="faq-answer">
+                        <p>Nextel pays a base rate of ₦395.5 per subscriber per month across all 6 NetGain streams. You also earn ₦50/min on NexCall, ₦12,000 per NexSim activation, referral bonuses, and milestone rewards.</p>
+                    </div>
+                </div>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question"><span>How long does verification take?</span><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 8L10 13L15 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+                    <div class="faq-answer">
+                        <p>Manual verification takes 1–24 hours after payment. We will confirm your account once the transfer is processed.</p>
+                    </div>
+                </div>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question"><span>What is the Network Referral Bonus?</span><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 8L10 13L15 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+                    <div class="faq-answer">
+                        <p>The Network Referral Bonus is ₦15,000 credited to your account for every subscriber you successfully recruit to Nextel. You also receive a ₦10,000 Network Milestone Reward on top, plus ₦400 for 1st indirect commissions.</p>
+                    </div>
+                </div>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question"><span>How fast are withdrawals processed?</span><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 8L10 13L15 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+                    <div class="faq-answer">
+                        <p>Nextel processes withdrawals within 24 hours to local Nigerian bank accounts. Contact our Telegram admin at t.me for withdrawal requests.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══ PROFILE PAGE ══ -->
+        <div id="profilePage" class="page-content">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">My Profile</h1>
+                    <p class="page-subtitle">Manage your NTU distributor account</p>
+                </div>
+            </div>
+            <div class="profile-layout">
+                <div class="profile-card">
+                    <div class="profile-avatar" id="profileInitials">N</div>
+                    <h2 class="profile-name" id="profileName">Distributor</h2>
+                    <p class="profile-email" id="profileEmail">—</p>
+                    <div class="profile-badge">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M5 8L7 10L11 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>                        Nextel NTU Distributor
+                    </div>
+                </div>
+                <div class="profile-details-card">
+                    <h3 class="card-title">Account Information</h3>
+                    <div class="profile-info-grid">
+                        <div class="profile-info-item"><span class="info-label">Full Name</span><span class="info-value" id="profileFullName">—</span></div>
+                        <div class="profile-info-item"><span class="info-label">Email Address</span><span class="info-value" id="profileEmailInfo">—</span></div>
+                        <div class="profile-info-item"><span class="info-label">Joined</span><span class="info-value" id="profileJoined">—</span></div>
+                        <div class="profile-info-item"><span class="info-label">Account Status</span><span class="info-value" id="profileStatus" style="color:var(--gold);">Loading...</span></div>
+                    </div>
+
+                    <h3 class="card-title" style="margin-top:24px;">Your Referral Link</h3>
+                    <div class="referral-box">
+                        <div class="referral-code-display">
+                            <span class="referral-label">nextelconnect.ng/signup?ref=</span>
+                            <span class="referral-code" id="referralCode">NEXTEL0000</span>
+                        </div>
+                        <button class="btn-secondary" onclick="copyReferralCode()">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="10" height="10" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M4 14H12C13.1 14 14 13.1 14 12V4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              Copy Link
+            </button>
+                    </div>
+                    <p style="font-size:0.78rem;color:var(--text-muted);margin-top:8px;">Earn ₦400 per 1st-level referral · ₦100 per 2nd-level referral</p>
+
+                    <h3 class="card-title" style="margin-top:24px;">Notifications</h3>
+                    <div class="notification-option">
+                        <div class="notification-option-info">
+                            <h4>Email Notifications</h4>
+                            <p>Receive updates about NetGain streams and account activity</p>
+                        </div>
+                        <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+                    </div>
+                    <div class="notification-option">
+                        <div class="notification-option-info">
+                            <h4><svg width="12" height="12" viewBox="0 0 16 16" style="display:inline-block;vertical-align:-1px;margin-right:5px;"><circle cx="8" cy="8" r="5" fill="#ef4444"/><circle cx="8" cy="8" r="7.5" stroke="#ef4444" stroke-width="1.5" fill="none" opacity="0.4"/></svg>Live
+                                Activity Feed</h4>
+                            <p>Show real-time distributor activity notifications</p>
+                        </div>
+                        <label class="toggle-switch"><input type="checkbox" checked id="activityFeedToggle" onchange="toggleActivityFeed(this.checked)"><span class="toggle-slider"></span></label>
+                    </div>
+                    <div class="notification-option">
+                        <div class="notification-option-info">
+                            <h4>Withdrawal Updates</h4>
+                            <p>Notifications about your NetGain withdrawal status</p>
+                        </div>
+                        <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+                    </div>
+
+                    <div style="margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.05);">
+                        <button class="btn-danger-outline" onclick="logout()" style="width:100%;">Sign Out of Nextel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav" id="bottomNav">
+        <button class="bottom-nav-item active" data-page="home" onclick="switchPage('home')">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 9L12 2L21 9V20C21 20.5 20.8 21 20.4 21.4C20 21.8 19.5 22 19 22H5C4.5 22 4 21.8 3.6 21.4C3.2 21 3 20.5 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+    <span>Home</span>
+  </button>
+        <button class="bottom-nav-item nav-featured" data-page="gigs" onclick="switchPage('gigs')">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M9 11L13 13L9 15V11Z" fill="currentColor"/></svg>
+    <span>Streams</span>
+  </button>
+        <button class="bottom-nav-item" data-page="earnings" onclick="switchPage('earnings')">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span>Earnings</span>
+  </button>
+        <button class="bottom-nav-item" data-page="wallet" onclick="switchPage('wallet')">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="13" rx="2" stroke="currentColor" stroke-width="2"/><circle cx="16" cy="12" r="2" fill="currentColor"/></svg>
+    <span>Wallet</span>
+  </button>
+        <button class="bottom-nav-item" data-page="profile" onclick="switchPage('profile')">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20C4 16.7 6.7 14 10 14H14C17.3 14 20 16.7 20 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <span>Profile</span>
+  </button>
+    </nav>
+
+    <!-- ══ PAYMENT MODAL — MONIEPOINT MANUAL TRANSFER ══ -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-overlay" onclick="closePaymentModal()"></div>
+        <div class="modal-content payment-modal-content">
+            <button class="modal-close" onclick="closePaymentModal()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+            <div class="payment-modal-header">
+                <div class="logo-payment">
+                    <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#E8C96A,#C9A84C);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#04100A;font-family:'Plus Jakarta Sans',sans-serif;">N</div>
+                    <span>Nextel</span>
+                </div>
+                <h1>NTU Registration Fee Payment</h1>
+                <p>Transfer to activate your account and unlock all 6 NetGain streams</p>
+            </div>
+            <div class="payment-modal-body">
+                <div class="instruction-banner">
+                    <p><strong>Direct Bank Transfer:</strong> Transfer exactly <span id="instructionAmount">₦17,500</span> to the account below, then click "I've Made the Transfer" to proceed to verification.</p>
+                </div>
+                <div class="amount-section">
+                    <div class="amount-label">Amount to Transfer</div>
+                    <div class="amount-value-large" id="modalAmountDisplay">₦17,500</div>
+                    <div class="package-badge">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="2"/><path d="M5 8L7 10L11 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                        <span id="modalPackageBadge">PREMIUM NTU REGISTRATION • ₦15,000 Network Referral Bonus</span>
+                    </div>
+                </div>
+
+                <div class="payment-details-card">
+                    <div class="payment-detail-row">
+                        <span class="payment-detail-label">Bank</span>
+                        <div class="payment-detail-value"><span class="bank-name-highlight"> Kredi Money Mfb Ltd </span></div>
+                    </div>
+                    <div class="payment-detail-row">
+                        <span class="payment-detail-label">Account Name</span>
+                        <div class="payment-detail-value"><span style="font-weight:600;color:var(--text-primary);"> Raenest/John Ayodeji </span></div>
+                    </div>
+                    <div class="payment-detail-row">
+                        <span class="payment-detail-label">Account Number</span>
+                        <div class="payment-detail-value">
+                            <span class="account-number-big" id="moniepoint-account">1829604399</span>
+                            <button class="copy-btn-new" onclick="copyAccountNumber()">
+              <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="8" height="9" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M4 3V2.5A1.5 1.5 0 015.5 1h5A1.5 1.5 0 0112 2.5v8A1.5 1.5 0 0110.5 12H10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+              Copy
+            </button>
+                        </div>
+                    </div>
+                    <div class="payment-detail-row">
+                        <span class="payment-detail-label">Amount</span>
+                        <div class="payment-detail-value"><span id="paymentDetailAmount" style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.1rem;font-weight:800;color:var(--gold);">₦17,500 exactly</span></div>
+                    </div>
+                </div>
+
+                <button class="btn-confirm-payment" onclick="confirmManualPayment()">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10L8 14L16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        I've Made the Transfer ✦
+      </button>
+
+                <div style="text-align:center;margin-top:14px;">
+                    <a href="https://t.me" target="_blank" rel="noopener" style="font-size:13px;color:var(--text-muted);text-decoration:none;border-bottom:1px dashed rgba(255,255,255,0.2);padding-bottom:2px;">
+          Need help? Chat with Nextel Admin on Telegram →
+        </a>
+                </div>
+
+                <button class="btn-cancel-payment" onclick="closePaymentModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loadingOverlayPayment">
+        <div class="loading-content">
+            <div class="loading-spinner-custom"></div>
+            <div class="loading-text-custom">Processing...</div>
+            <div class="loading-subtext-custom">Please wait — confirming your transfer</div>
+        </div>
+    </div>
+
+    <!-- ══ WITHDRAW MODAL ══ -->
+    <div class="modal" id="withdrawModal">
+        <div class="modal-overlay" onclick="closeWithdrawModal()"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeWithdrawModal()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+            <div class="modal-header">
+                <h2 class="modal-title">Withdraw NetGains</h2>
+                <p class="modal-subtitle">Naira transferred to your Nigerian bank within 24 hours</p>
+            </div>
+            <div class="modal-body">
+                <form id="withdrawForm" onsubmit="submitWithdrawal(event)">
+                    <div class="form-group"><label class="form-label">Available Balance</label>
+                        <div class="balance-display" id="modalBalance">₦0</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="withdrawAmount">Amount (₦)</label>
+                        <input type="number" id="withdrawAmount" class="form-input" placeholder="Min. ₦1,000" min="1000" step="1" required>
+                        <div class="quick-amounts">
+                            <button type="button" class="quick-amount-btn" onclick="setAmount(5000)">₦5K</button>
+                            <button type="button" class="quick-amount-btn" onclick="setAmount(10000)">₦10K</button>
+                            <button type="button" class="quick-amount-btn" onclick="setAmount(20000)">₦20K</button>
+                            <button type="button" class="quick-amount-btn" onclick="setAmountMax()">Max</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="bankAccount">Bank Account</label>
+                        <select id="bankAccount" class="form-input" required><option value="">Select bank account</option></select>
+                    </div>
+                    <button type="submit" class="btn-primary btn-lg btn-full">Confirm Withdrawal</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ ADD BANK MODAL ══ -->
+    <div class="modal" id="addBankModal">
+        <div class="modal-overlay" onclick="closeAddBankModal()"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeAddBankModal()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+            <div class="modal-header">
+                <h2 class="modal-title">Add Bank Account</h2>
+                <p class="modal-subtitle">Add your Nigerian bank for Naira withdrawals</p>
+            </div>
+            <div class="modal-body">
+                <form id="addBankForm" onsubmit="submitBankAccount(event)">
+                    <div class="form-group">
+                        <label class="form-label" for="bankName">Bank Name</label>
+                        <select id="bankName" class="form-input" required>
+            <option value="">Select your bank</option>
+            <option value="access">Access Bank</option>
+            <option value="gtb">GTBank</option>
+            <option value="firstbank">First Bank</option>
+            <option value="uba">UBA</option>
+            <option value="zenith">Zenith Bank</option>
+            <option value="kuda">Kuda Bank</option>
+            <option value="opay">OPay</option>
+            <option value="palmpay">PalmPay</option>
+            <option value="moniepoint">Moniepoint MFB</option>
+          </select>
+                    </div>
+                    <div class="form-group"><label class="form-label" for="accountNumber">Account Number</label><input type="text" id="accountNumber" class="form-input" placeholder="10-digit account number" maxlength="10" pattern="[0-9]{10}" required></div>
+                    <div class="form-group"><label class="form-label" for="accountName">Account Name</label><input type="text" id="accountName" class="form-input" placeholder="Account name" readonly></div>
+                    <button type="submit" class="btn-primary btn-lg btn-full">Add Bank Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ GO BACK MODAL ══ -->
+    <div class="go-back-modal-overlay" id="goBackModal">
+        <div class="go-back-modal">
+            <div class="go-back-modal-icon"><svg width="40" height="40" viewBox="0 0 40 40" fill="none"><path d="M17.15 5.77L2.37 30a3.33 3.33 0 0 0 2.85 5h29.56a3.33 3.33 0 0 0 2.85-5L22.85 5.77a3.33 3.33 0 0 0-5.7 0z" stroke="#f59e0b" stroke-width="2"/><line x1="20" y1="15" x2="20" y2="24" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/><circle cx="20" cy="29" r="1.5" fill="#f59e0b"/></svg></div>
+            <h3 class="go-back-modal-title">Go Back to Registration?</h3>
+            <p class="go-back-modal-body">If you <strong>haven't made the transfer yet</strong> or accidentally bypassed the payment step, you can restart the registration process.</p>
+            <p class="go-back-modal-note"><strong>Already transferred?</strong> Do NOT go back — your payment is being verified. Contact Nextel admin on Telegram for a faster response.</p>
+            <div class="go-back-modal-actions">
+                <button class="go-back-modal-btn-confirm" onclick="confirmGoBack()">Yes, Go Back &amp; Restart</button>
+                <button class="go-back-modal-btn-cancel" onclick="closeGoBackModal()">No, I Already Paid — Keep Waiting</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- App Download Banner -->
+    <div class="app-download-banner" id="appDownloadBanner">
+        <button class="app-banner-close" onclick="closeAppBanner()" aria-label="Close">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+        <div class="app-banner-content">
+            <div class="app-banner-icon" style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:14px;color:#04100A;">N</div>
+            <div class="app-banner-text">
+                <div class="app-banner-title">Get the Nextel App</div>
+                <div class="app-banner-subtitle">Manage your network · Fast &amp; Secure</div>
+            </div>
+            <button class="app-banner-download" onclick="showNotification('info','Coming Soon','The Nextel app is launching on Google Play soon!')">Download</button>
+        </div>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+
+</html>
